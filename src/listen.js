@@ -14,9 +14,17 @@ var options = {
     cert: fs.readFileSync(__dirname + '/../assert/cacert.pem')
 };
 
-module.exports = function (port, callback) {
-
-    var httpServer = http.createServer(callback);
+module.exports = function (config, server, callback) {
+    var port = 3000;
+    if (typeof config == 'number') {
+        port = config;
+        config = {port: 3000}
+    }
+    if (!config) {
+        throw new Error('proxy.listen need ');
+        return;
+    }
+    var httpServer = http.createServer(server);
     let { key, cert } = options,
         cxnEstablished = new Buffer(`HTTP/1.1 200 Connection Established\r\n\r\n`, 'ascii');
 
@@ -26,7 +34,6 @@ module.exports = function (port, callback) {
         SNICallback: sni(key, cert),
     }, (fromClient, toClient) => {
         // https端的响应
-        console.log('in https server');
         let shp = 'https://' + fromClient.headers.host
             , fullUrl = shp + fromClient.url
             , addr = httpServer.address() // http port
@@ -37,31 +44,33 @@ module.exports = function (port, callback) {
             path: fullUrl,
             headers: fromClient.headers,
         }, fromServer => {
-            console.log('in https server response')
-            toClient.writeHead(fromServer.statusCode, fromServer.headers)
+            toClient.writeHead(fromServer.status, fromServer.headers)
             fromServer.pipe(toClient)
-        })
+        });
         fromClient.pipe(toServer)
     });
 
 
+    /**
+     * 断开客户端和http服务器之间通道， 连接客户端和https服务器之间的通道
+     **/
     httpServer.on('connect', (request, clientSocket, head) => {
-        console.log('on http connect： step 1');
-        console.log(head);
-        let addr = httpsServer.address()
+        let addr = httpsServer.address();
         // 连接https
         let serverSocket = net.connect(addr.port, addr.address, () => {
-            // serverSocket http和https之间的通道
-            // clientSocket http和client之间的通道
-            console.log('on http net.connect step 2');
-            clientSocket.write(cxnEstablished)
-            serverSocket.write(head)
+            clientSocket.write(cxnEstablished);
+            serverSocket.write(head);
             clientSocket
                 .pipe(serverSocket)
-                .pipe(clientSocket)
+                .pipe(clientSocket);
         })
     });
 
-    httpsServer.listen(0);
-    httpServer.listen(port);
+
+    httpsServer.listen(0, function (err) {
+        if (err) {
+            console.log('koa-proxy https err: ', err);
+        }
+    });
+    httpServer.listen(config.port, callback);
 };

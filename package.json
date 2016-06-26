@@ -1,7 +1,7 @@
 {
-  "name": "bnjs2",
+  "name": "koa-proxy",
   "version": "1.0.0",
-  "description": "* 请求html时自动追加bnjs * 根据页面compid和comppage，读取项目配置，自动跳转到对应页面 * 可以本地模拟设备和地理位置,以及接口数据 * 替换bnjs的page.start函数和page.startPay函数",
+  "description": "本地服务器并且可以当做代理工具使用，支持https代理",
   "main": "lib/index.js",
   "dependencies": {
     "koa": "^2.0.0",
@@ -32,5 +32,5 @@
     "build": "babel src --watch -d  lib"
   },
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }
