@@ -8,23 +8,32 @@ var https = require('https');
 var net = require('net');
 var sni = require('./sni');
 var fs = require('fs');
+var load = require('./load');
 
 var options = {
     key: fs.readFileSync(__dirname + '/../assert/cakey.pem'),
     cert: fs.readFileSync(__dirname + '/../assert/cacert.pem')
 };
 
-module.exports = function (config, server, callback) {
+module.exports = function (config, callback) {
     var port = 3000;
     if (typeof config == 'number') {
         port = config;
-        config = {port: 3000}
+        config = {port: port}
     }
     if (!config) {
-        throw new Error('proxy.listen need ');
+        throw new Error('Proxy Need arguments as: {port: 3000} ');
         return;
     }
-    var httpServer = http.createServer(server);
+
+    var proxy = this;
+    var app = proxy.app;
+    // 添加自动加载
+    app.use(load());
+
+
+
+    var httpServer = http.createServer(app.callback());
     let { key, cert } = options,
         cxnEstablished = new Buffer(`HTTP/1.1 200 Connection Established\r\n\r\n`, 'ascii');
 
