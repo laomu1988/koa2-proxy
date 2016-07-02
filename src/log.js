@@ -2,7 +2,7 @@ module.exports = function (config) {
     var proxy = this;
     return async (ctx, next) => {
         //console.log('start:', ctx.response.status);
-        proxy.trigger('start', ctx, next);
+        proxy.trigger('start', ctx);
         var start = new Date;
         try {
             await next();
@@ -16,7 +16,7 @@ module.exports = function (config) {
             ctx.response.status = 404;
             ctx.response.body = 'not found';
         }
-        proxy.trigger('end', ctx, next);
+        proxy.trigger('end', ctx);
         console.log('%s:%s status:%s,time:%s', ctx.method, ctx.url, ctx.response.status, ms);
     };
 };

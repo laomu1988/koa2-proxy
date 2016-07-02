@@ -31,8 +31,6 @@ module.exports = function (config, callback) {
     // 添加自动加载
     app.use(load());
 
-
-
     var httpServer = http.createServer(app.callback());
     let { key, cert } = options,
         cxnEstablished = new Buffer(`HTTP/1.1 200 Connection Established\r\n\r\n`, 'ascii');
