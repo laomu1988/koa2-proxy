@@ -122,11 +122,7 @@ function mockFile(ctx, filepath, method) {
         }
     } else {
         ctx.info = 'MockFile:' + filepath;
-        if (ctx.isBinary(filepath)) {
-            ctx.response.body = fs.createReadStream(filepath);
-        } else {
-            ctx.response.body = fs.readFileSync(filepath, 'utf8');
-        }
+        ctx.sendFile(filepath);
     }
     return true;
 }
