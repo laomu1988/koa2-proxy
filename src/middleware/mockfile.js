@@ -28,6 +28,7 @@ module.exports = function (config) {
     }
 
     return function (ctx, next) {
+        ctx.logger.debug('middleware: mockfile');
         // 文件已发送
         if (ctx.hasSend()) {
             return next();
@@ -35,79 +36,71 @@ module.exports = function (config) {
 
         var promise = null;
         if (config.mockfile) {
-            try {
-                // console.log('mockfile:', config.mockfile);
-                var content = fs.readFileSync(config.mockfile, 'utf8');
-                var lines = content.split('\n');
-                var root = '';
-                for (var i = 0; i < lines.length; i++) {
-                    var params = (lines[i] + '').replace(/\s+/g, ' ').split(' ');
-                    if (params[0] == 'root' && params.length > 1) {
-                        root = params[1];
-                        continue;
-                    }
-                    if (params.length >= 3) {
-                        try {
-                            var path = ctx.url;
-                            // console.log('mockrule: ', params);
-                            var reg = new RegExp(params[1]), method = params[0];
-                            if ((method !== 'replace' && method !== 'redirect' && method !== 'rewrite' && method !== 'exec') || !reg.test(path)) {
-                                continue;
-                            }
-                            if (method === 'redirect') {
-                                //res.redirect(params[2]);
-                                // console.log('redirect:', params[2]);
-                                ctx.response.redirect(params[2]);
-                                return true;
-                            }
-                            switch (params[0]) {
-                                case 'replace':
-                                    path = path.replace(reg, params[2]);
-                                    break;
-                                case 'rewrite':
-                                case 'exec':
-                                    path = params[2];
-                                    break;
-                            }
-                            if (path.charAt(0) == '/') {
-                                if (root) {
-                                    path = root + path;
-                                    path = Path.resolve(Path.dirname(config.mockfile), path);
-                                } else {
-                                    path = config.root + path;
-                                }
-                            } else {
-                                path = Path.resolve(Path.dirname(config.mockfile), path);
-                                // console.log('newPath:', path);
-                            }
-                            // console.log('mockTestPath:', path);
-                            if (mockFile(ctx, path, params[0])) {
-                                return next();
-                            }
-                        }
-                        catch (e) {
-                            // console.log('mock error:', e);
-                            continue;
-                        }
-                    }
-                }
-
-            } catch (e) {
-                // console.log(e);
-            }
+            mockfile(ctx, config.mockfile);
         }
-
         return next();
     };
 };
+function mockfile(ctx, mockfile) {
+    try {
+        // console.log('mockfile:', config.mockfile);
+        var content = fs.readFileSync(mockfile, 'utf8');
+        var lines = content.split('\n');
+        var root = '';
+        for (var i = 0; i < lines.length; i++) {
+            var params = (lines[i] + '').replace(/\s+/g, ' ').split(' ');
+            if (params[0] == 'root' && params.length > 1) {
+                root = params[1];
+                continue;
+            }
+            if (params.length >= 3) {
+                var path = ctx.url;
+                // console.log('mockrule: ', params);
+                var reg = new RegExp(params[1]), method = params[0];
+                if ((method !== 'replace' && method !== 'redirect' && method !== 'rewrite' && method !== 'exec') || !reg.test(path)) {
+                    continue;
+                }
+                if (method === 'redirect') {
+                    //res.redirect(params[2]);
+                    // console.log('redirect:', params[2]);
+                    ctx.response.redirect(params[2]);
+                    return;
+                }
+                switch (params[0]) {
+                    case 'replace':
+                        path = path.replace(reg, params[2]);
+                        break;
+                    case 'rewrite':
+                    case 'exec':
+                        path = params[2];
+                        break;
+                }
+                if (path.charAt(0) == '/') {
+                    if (root) {
+                        path = root + path;
+                        path = Path.resolve(Path.dirname(config.mockfile), path);
+                    } else {
+                        path = config.root + path;
+                    }
+                } else {
+                    path = Path.resolve(Path.dirname(config.mockfile), path);
+                    // console.log('newPath:', path);
+                }
+                // console.log('mockTestPath:', path);
+                if (sendMockFile(ctx, path, params[0])) {
+                    return;
+                }
+            }
+        }
+    } catch (e) {
+        ctx.logger.error('MockFileError:', e);
+    }
+}
 
-
-function mockFile(ctx, filepath, method) {
+function sendMockFile(ctx, filepath, method) {
     if (!fs.existsSync(filepath)) {
         return false;
     }
-    // console.log('sendFile: ', filepath);
-    // logger.info(ctx.path, 'MockFile:', filepath);
     if (method === 'exec') {
         if (require.cache && require.cache[filepath]) {
             require.cache[filepath] = undefined;
@@ -118,7 +111,7 @@ function mockFile(ctx, filepath, method) {
             ctx.info = 'MockExeFile:' + filepath;
             return true;
         } else {
-            console.log('mockfile exec rule need js to export an function...');
+            ctx.logger.warn('mockfile exec rule need js to export an function:', filepath);
         }
     } else {
         ctx.info = 'MockFile:' + filepath;

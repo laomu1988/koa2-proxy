@@ -1,7 +1,7 @@
 module.exports = function (config) {
     var proxy = this;
     return async (ctx, next) => {
-        //console.log('start:', ctx.response.status);
+        ctx.logger.debug('middleware:log start');
         proxy.trigger('start', ctx);
         var start = new Date;
         try {
@@ -17,6 +17,6 @@ module.exports = function (config) {
             ctx.response.body = 'not found';
         }
         proxy.trigger('end', ctx);
-        console.log('%s:%s status:%s,time:%s', ctx.method, ctx.url, ctx.response.status, ms);
+        ctx.logger.debug('middleware:log end');
     };
 };
