@@ -1,7 +1,12 @@
 var proxy = require(__dirname + './../lib/index');
 
 
-proxy.use(proxy.static(__dirname));
+proxy.static(__dirname);
+
+proxy.mockfile(__dirname + '/mockfile.txt');
+
+proxy.smarty({ext: '.html', data: {data: 'smarty html'}});
+
 
 proxy.on('start', function (ctx) {
     console.log('start: ', ctx.request.url, ctx.isLocal());
@@ -9,10 +14,6 @@ proxy.on('start', function (ctx) {
 proxy.on('end', function (ctx) {
     console.log('end: ', ctx.request.url);
 });
-proxy.listen(3010, function (err) {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log('start server at http://localhost:3010');
-    }
-});
+
+
+proxy.listen(3010);
