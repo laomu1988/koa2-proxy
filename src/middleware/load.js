@@ -16,24 +16,32 @@ module.exports = function (config) {
         ctx.request.header['connection'] = 'close'; // 取消keep-alive
         //ctx.request.header['proxy-connection'] = 'close'; // 代理
 
+        var reqdata = {
+            uri: ctx.url,
+            method: ctx.method,
+            headers: ctx.request.header
+        };
+        if (req.request.body) {
+            reqdata.formData = req.request.body;
+        }
+
         if (ctx.isBinary(ctx.req.pathname)) {
-            ctx.response.body = request({
-                uri: ctx.url,
-                method: ctx.method,
-                headers: ctx.request.header
-            });
+            try {
+                ctx.response.body = request(reqdata);
+            } catch (e) {
+                ctx.logger.debug('middleware load error: ', e);
+            }
+
             return next();
         } else {
             return new Promise(function (resolve, reject) {
-                request({
-                    uri: ctx.url,
-                    method: ctx.method,
-                    headers: ctx.request.header
-                }, function (err, response, body) {
+                request(reqdata, function (err, response, body) {
                     if (!err) {
                         //console.log(response.headers);
                         ctx.response.body = body;
                         ctx.response.set(response.headers);
+                    } else {
+                        ctx.logger.debug('middleware load data error: ', e);
                     }
                     return next();
                 });

@@ -2,8 +2,9 @@ require("babel-core/register");
 require("babel-polyfill");
 
 var koa = require('koa');
-var listen = require('./listen');
+var bodyParser = require('koa-bodyparser');
 var ip = require('ip');
+var listen = require('./listen');
 var extend = require('./extends');
 var logger = require('logger-color');
 var log = require('./log');
@@ -48,6 +49,7 @@ proxy.emit = proxy.trigger = function () {
     event.emit.apply(event, arguments);
 };
 proxy.app.use(extend.bind(proxy)());
+proxy.app.use(bodyParser())
 proxy.app.use(log.bind(proxy)());
 proxy.listen = listen.bind(proxy);
 module.exports = proxy;

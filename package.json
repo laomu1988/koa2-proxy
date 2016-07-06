@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "koa": "^2.0.0",
+    "koa-bodyparser": "^3.1.0",
     "koa-slow": "^2.1.0",
     "regenerator": "^0.8.46",
     "request": "^2.72.0",
