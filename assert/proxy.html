@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="cn">
+<head>
+	<meta charset="UTF-8">
+	<title>Test</title>
+	<script src="/socket.io.js"></script>
+</head>
+<body>
+<script>
+	var socket = io('http://' + location.host);
+	socket.on('request', function (data) {
+		console.log(data);
+		socket.emit('my other event', {my: 'data'});
+	});
+	socket.on('response', function (data) {
+		console.log(data);
+		socket.emit('my other event', {my: 'data'});
+	});
+</script>
+</body>
+</html>

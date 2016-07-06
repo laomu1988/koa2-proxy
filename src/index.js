@@ -26,6 +26,16 @@ proxy.smarty = function () {
     app.use(require('./middleware/smarty').apply(proxy, arguments));
 };
 
+proxy.browser = function (server) {
+    setTimeout(function () {
+        if (proxy.httpServer) {
+            require('./browser').bind(proxy)(server || proxy.httpServer);
+        } else {
+            proxy.logger.error('proxy.browser has not start server');
+        }
+    }, 10);
+};
+
 proxy.logger = logger;
 
 var Event = require('events').EventEmitter;

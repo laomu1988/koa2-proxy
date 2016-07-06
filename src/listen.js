@@ -95,6 +95,7 @@ module.exports = function (_config, callback) {
                 console.log('koa-proxy https err: ', err);
             }
         });
+        proxy.httpsServer = httpsServer;
     }
     httpServer.listen(config.port, function (err) {
         if (typeof callback === 'function') {
@@ -105,4 +106,6 @@ module.exports = function (_config, callback) {
             console.log('start server at http://localhost:' + config.port, '  same as  http://' + ip.address() + ':' + config.port);
         }
     });
+
+    proxy.httpServer = httpServer;
 };
