@@ -10,6 +10,7 @@ proxy.smarty({ext: '.html', data: {data: 'smarty html'}});
 
 proxy.on('start', function (ctx) {
     console.log('start: ', ctx.request.url, ctx.isLocal());
+    console.log('body', ctx.request.body);
 });
 proxy.on('end', function (ctx) {
     console.log('end: ', ctx.request.url);

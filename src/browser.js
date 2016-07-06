@@ -25,25 +25,32 @@ module.exports = function (server) {
     // 创建一个Socket.IO实例，把它传递给服务器
     var socket = io.listen(server);
     // 添加一个连接监听器
-    var client;
-    socket.on('connection', function (_client) {
+    var clients = [];
+    socket.on('connection', function (client) {
         // 成功！现在开始监听接收到的消息
-        client = _client;
-        client.emit('news', {hello: 'world'});
-        client.on('my other event', function (data) {
-            console.log(data);
+        client.on('ready', function () {
+            console.log('client ready');
+            clients.push(client);
         });
-        client.on('message', function (event) {
-            console.log('Received message from client!', event);
+        client.on('view', function (data) {
+            console.log('Received message from client:', data);
+            if (data && data.id) {
+                var file = folder + data.id + '-response-body.data';
+                if (fs.existsSync(file)) {
+                    client.emit('view', {id: data.id, 'body': fs.readFileSync(file, 'utf8')})
+                } else {
+                    client.emit('view', {id: data.id, 'body': ''})
+                }
+            }
         });
         client.on('disconnect', function () {
-            client = null;
+            clients.splice(clients.indexOf(client), 1);
             console.log('Server has disconnected');
         });
     });
 
     proxy.on('start', function (ctx) {
-        if (client) {
+        if (clients.length > 0) {
             count += 1;
             ctx.__socketid = count + '' + Date.now();
             var data = {
@@ -51,19 +58,31 @@ module.exports = function (server) {
                 url: ctx.request.url,
                 header: ctx.request.header
             };
+            if (ctx.request.body) {
+                data.body = ctx.request.body;
+            }
 
             fs.writeFileSync(folder + ctx.__socketid + '-request.json', JSON.stringify(data, null, '    '));
-            client.emit('request', data);
+            clients.forEach(function (client) {
+                client.emit('request', data);
+            });
         }
     });
     proxy.on('end', function (ctx) {
-        if (client && ctx.__socketid) {
+        if (clients.length > 0 && ctx.__socketid) {
             var data = {
                 id: ctx.__socketid,
-                header: ctx.response.header
+                header: ctx.response.header,
+                statusCode: ctx.response.status,
+                statusString: ctx.response.statusString
             };
             fs.writeFileSync(folder + ctx.__socketid + '-response.json', JSON.stringify(data, null, '    '));
-            client.emit('response', data);
+            if (typeof ctx.response.body == 'string') {
+                fs.writeFileSync(folder + ctx.__socketid + '-response-body.data', ctx.response.body, 'utf8');
+            }
+            clients.forEach(function (client) {
+                client.emit('response', data);
+            });
         }
     });
 };

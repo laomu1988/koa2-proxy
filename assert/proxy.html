@@ -6,15 +6,24 @@
 	<script src="/socket.io.js"></script>
 </head>
 <body>
+<div>
+
+</div>
 <script>
 	var socket = io('http://' + location.host);
+	socket.emit('ready');
+
 	socket.on('request', function (data) {
-		console.log(data);
-		socket.emit('my other event', {my: 'data'});
+		console.log('request:', data);
 	});
 	socket.on('response', function (data) {
-		console.log(data);
-		socket.emit('my other event', {my: 'data'});
+		console.log('response', data);
+		if (data.id) {
+			socket.emit('view', {id: data.id});
+		}
+	});
+	socket.on('view', function (data) {
+
 	});
 </script>
 </body>
