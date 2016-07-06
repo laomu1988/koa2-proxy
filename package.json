@@ -1,15 +1,20 @@
 {
-  "name": "koa-proxy",
+  "name": "koa2-proxy",
   "version": "1.0.0",
-  "description": "本地服务器并且可以当做代理工具使用，支持https代理",
+  "description": "基于koa@2的代理工具，支持http和https，并且可以当做本地服务器使用",
   "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src --watch -d  lib"
+  },
   "dependencies": {
     "koa": "^2.0.0",
     "koa-slow": "^2.1.0",
     "regenerator": "^0.8.46",
     "request": "^2.72.0",
     "request-promise": "^3.0.0",
-    "smarty4js": "^0.1.8"
+    "smarty4js": "^0.1.8",
+    "socket.io": "^1.4.8"
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
@@ -28,9 +33,9 @@
     "pem": "^1.8.3",
     "webpack": "^1.13.1"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src --watch -d  lib"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laomu1988/koa-proxy.git"
   },
   "author": "",
   "license": "MIT"
