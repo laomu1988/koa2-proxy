@@ -19,39 +19,29 @@ module.exports = function (config) {
         var reqdata = {
             uri: ctx.url,
             method: ctx.method,
-            headers: ctx.request.header
+            headers: ctx.request.header,
+            encoding: null
         };
         if (ctx.request.body) {
             reqdata.formData = ctx.request.body;
         }
 
-        if (ctx.isBinary(ctx.url)) {
-            try {
-                ctx.logger.debug('load data is binary..');
-                ctx.response.body = request(reqdata);
-            } catch (e) {
-                ctx.logger.debug('middleware load error: ', e);
-            }
-
-            return next();
-        } else {
-            return new Promise(function (resolve, reject) {
-                request(reqdata, function (err, response, body) {
-                    try {
-                        if (!err) {
-                            ctx.logger.debug('load has response data.');
-                            ctx.response.body = body;
-                            ctx.response.set(response.headers);
-                            ctx.logger.debug('load has set success.');
-                        } else {
-                            ctx.logger.debug('middleware load data error: ', err);
-                        }
-                    } catch (e) {
-                        ctx.logger.error('koa-proxy middleware load error:', e);
+        return new Promise(function (resolve, reject) {
+            request(reqdata, function (err, response, body) {
+                try {
+                    if (!err) {
+                        ctx.logger.debug('load has response data.');
+                        ctx.response.body = body;
+                        ctx.response.set(response.headers);
+                        ctx.logger.debug('load has set success.');
+                    } else {
+                        ctx.logger.debug('middleware load data error: ', err);
                     }
-                    resolve(next());
-                });
+                } catch (e) {
+                    ctx.logger.error('koa-proxy middleware load error:', e);
+                }
+                resolve(next());
             });
-        }
+        });
     };
 }
