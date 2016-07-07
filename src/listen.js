@@ -2,7 +2,7 @@
  * 监听端口
  * http和https
  **/
-
+'use strict';
 var http = require('http');
 var https = require('https');
 var net = require('net');
@@ -28,7 +28,7 @@ module.exports = function (_config, callback) {
     // 下载cert证书
     if (config.loadCertUrl) {
         app.use(function (ctx, next) {
-            ctx.logger.debug('middleware: loadcert');
+            ctx.logger.debug('middleware: loadcert ');
             if (ctx.hasSend()) {
                 return next();
             }
@@ -43,8 +43,6 @@ module.exports = function (_config, callback) {
         });
     }
 
-    // 添加自动加载
-    app.use(load());
 
     var httpServer = http.createServer(app.callback());
 
@@ -93,19 +91,32 @@ module.exports = function (_config, callback) {
         httpsServer.listen(0, function (err) {
             if (err) {
                 console.log('koa-proxy https err: ', err);
+            }else{
+                proxy.httpsServer = httpsServer;
+                proxy.trigger('https-server-start');
             }
         });
-        proxy.httpsServer = httpsServer;
+
     }
     httpServer.listen(config.port, function (err) {
+        if(err){
+            proxy.logger.error('koa-proxy listen error:',err);
+            if(typeof callback === 'function'){
+                callback(err);
+            }
+            return false;
+        }
+
+        proxy.httpServer = httpServer;
+        proxy.trigger('http-server-start');
+
+        // 添加自动加载
+        app.use(load());
+
         if (typeof callback === 'function') {
             callback(err);
-        } else if (err) {
-            throw err;
         } else {
             console.log('start server at http://localhost:' + config.port, '  same as  http://' + ip.address() + ':' + config.port);
         }
     });
-
-    proxy.httpServer = httpServer;
 };

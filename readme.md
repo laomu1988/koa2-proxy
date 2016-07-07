@@ -49,6 +49,8 @@ proxy.listen(3010);
 
 ## 增加属性
 * proxy.app koa的实例:proxy.app = new koa();
+* proxy.httpServer  http服务器， 只有当http服务器启动后才会赋值（http-server-start事件）
+* proxy.httpsServer https服务器， 只有当http服务器启动后才会赋值（https-server-start事件）
 
 
 ## 增加函数
@@ -59,3 +61,10 @@ proxy.listen(3010);
 * ctx.isLocal() 判断当前请求是否是请求本地文件
 * ctx.isBinary(filename) 判断本地文件是否是二进制文件
 * ctx.sendFile(filepath) 发送本地文件
+
+
+## 事件(proxy.on(event,function(data){}))
+* http-server-start http服务器启动完成后触发
+* https-server-start  https服务器启动完成后触发
+* start: 请求开始时触发
+* end: 请求结束时触发
