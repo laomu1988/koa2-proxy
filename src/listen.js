@@ -106,7 +106,7 @@ module.exports = function (_config, callback) {
             }
             return false;
         }
-
+        proxy.port = config.port;
         proxy.httpServer = httpServer;
         proxy.trigger('http-server-start');
 

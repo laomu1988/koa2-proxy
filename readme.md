@@ -16,7 +16,7 @@ npm install koa2-proxy
 
 ## 使用
 ```
-var proxy = require(__dirname + './../lib/index');
+var proxy = require('koa2-proxy');
 
 // 本地静态服务器
 proxy.static(__dirname);
@@ -51,6 +51,7 @@ proxy.listen(3010);
 * proxy.app koa的实例:proxy.app = new koa();
 * proxy.httpServer  http服务器， 只有当http服务器启动后才会赋值（http-server-start事件）
 * proxy.httpsServer https服务器， 只有当http服务器启动后才会赋值（https-server-start事件）
+* ctx.proxy  proxy
 
 
 ## 增加函数

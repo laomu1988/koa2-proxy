@@ -21,12 +21,13 @@ module.exports = function (config) {
             method: ctx.method,
             headers: ctx.request.header
         };
-        if (req.request.body) {
-            reqdata.formData = req.request.body;
+        if (ctx.request.body) {
+            reqdata.formData = ctx.request.body;
         }
 
-        if (ctx.isBinary(ctx.req.pathname)) {
+        if (ctx.isBinary(ctx.url)) {
             try {
+                ctx.logger.debug('load data is binary..');
                 ctx.response.body = request(reqdata);
             } catch (e) {
                 ctx.logger.debug('middleware load error: ', e);
@@ -36,14 +37,19 @@ module.exports = function (config) {
         } else {
             return new Promise(function (resolve, reject) {
                 request(reqdata, function (err, response, body) {
-                    if (!err) {
-                        //console.log(response.headers);
-                        ctx.response.body = body;
-                        ctx.response.set(response.headers);
-                    } else {
-                        ctx.logger.debug('middleware load data error: ', e);
+                    try {
+                        if (!err) {
+                            ctx.logger.debug('load has response data.');
+                            ctx.response.body = body;
+                            ctx.response.set(response.headers);
+                            ctx.logger.debug('load has set success.');
+                        } else {
+                            ctx.logger.debug('middleware load data error: ', err);
+                        }
+                    } catch (e) {
+                        ctx.logger.error('koa-proxy middleware load error:', e);
                     }
-                    return next();
+                    resolve(next());
                 });
             });
         }
