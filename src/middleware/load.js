@@ -4,6 +4,20 @@
  **/
 var request = require('request');
 
+function handleHeader(header) {
+    if (!header) {
+        return;
+    }
+    for (var attr in header) {
+        if (attr.trim() != attr) {
+            header[attr.trim()] = header[attr];
+            delete header[attr];
+        }
+    }
+    return header;
+}
+
+
 module.exports = function (config) {
     return function (ctx, next) {
         ctx.logger.debug('middleware: load');
@@ -19,7 +33,7 @@ module.exports = function (config) {
         var reqdata = {
             uri: ctx.url,
             method: ctx.method,
-            headers: ctx.request.header,
+            headers: handleHeader(ctx.request.header),
             encoding: null
         };
         if (ctx.request.body) {
@@ -31,9 +45,8 @@ module.exports = function (config) {
                 try {
                     if (!err) {
                         ctx.logger.debug('load has response data.');
+                        ctx.response.set(handleHeader(response.headers));
                         ctx.response.body = body;
-                        ctx.response.set(response.headers);
-                        ctx.logger.debug('load has set success.');
                     } else {
                         ctx.logger.debug('middleware load data error: ', err);
                     }
