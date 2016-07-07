@@ -10,7 +10,15 @@ module.exports = function (url) {
     } else {
         host = this.request.host;
     }
-    if (host && (host.indexOf('localhost') >= 0 || host.indexOf('127.0.0.1') >= 0 || host.indexOf(ip.address()) >= 0)) {
+    if (!host) {
+        return false;
+    }
+    var port = this.proxy.port;
+    port = port == 80 ? '' : ':' + port;
+    var arr = ['localhost' + port, '127.0.0.1' + port, ip.address() + port];
+
+    if (arr.indexOf(host) >= 0) {
         return true;
     }
+    return false;
 };
