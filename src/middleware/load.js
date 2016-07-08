@@ -24,14 +24,15 @@ module.exports = function (config) {
         if (ctx.hasSend() || ctx.isLocal()) {
             return next();
         }
+        var uri = ctx.fullUrl();
 
-        ctx.logger.log('请求网络地址：', ctx.url, '               ');
+        ctx.logger.log('请求网络地址：', uri, '               ');
         ctx.request.header['accept-encoding'] = 'deflate'; // 取消gzip压缩
         ctx.request.header['connection'] = 'close'; // 取消keep-alive
         //ctx.request.header['proxy-connection'] = 'close'; // 代理
 
         var reqdata = {
-            uri: ctx.url,
+            uri: uri,
             method: ctx.method,
             headers: handleHeader(ctx.request.header),
             encoding: null
@@ -48,7 +49,7 @@ module.exports = function (config) {
                         ctx.response.set(handleHeader(response.headers));
                         ctx.response.body = body;
                     } else {
-                        ctx.logger.debug('middleware load data error: ', err);
+                        ctx.logger.error('middleware load data error: ', err);
                     }
                 } catch (e) {
                     ctx.logger.error('koa-proxy middleware load error:', e);

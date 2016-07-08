@@ -30,10 +30,9 @@ module.exports = function (config) {
     return function (ctx, next) {
         ctx.logger.debug('middleware: mockfile');
         // 文件已发送
-        if (ctx.hasSend()) {
+        if (ctx.hasSend() || !ctx.isLocal()) {
             return next();
         }
-
         var promise = null;
         if (config.mockfile) {
             mockfile(ctx, config);
