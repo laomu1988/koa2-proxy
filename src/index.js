@@ -31,10 +31,12 @@ proxy.when = function () {
     app.use(require('./middleware/when').apply(proxy, arguments));
 };
 
-proxy.browser = function (server) {
-    require('./browser').bind(proxy)(server);
-};
+//proxy.browser = function (server) {
+//    require('./browser').bind(proxy)(server);
+//};
 
+
+proxy.listen = listen.bind(proxy);
 proxy.logger = logger;
 
 var Event = require('events').EventEmitter;
@@ -46,8 +48,22 @@ proxy.on = proxy.bind = function () {
 proxy.emit = proxy.trigger = function () {
     event.emit.apply(event, arguments);
 };
-proxy.app.use(extend.bind(proxy)());
-proxy.app.use(bodyParser())
-proxy.app.use(log.bind(proxy)());
-proxy.listen = listen.bind(proxy);
+
+// 初始化
+proxy.use(extend.bind(proxy)());
+proxy.use(bodyParser())
+proxy.use(log.bind(proxy)());
+proxy.use(require('./middleware/limit.js').bind(proxy)(3));
+
+
+// 错误处理
+process.on('uncaughtException', function (err) {
+    proxy.logger.error('uncaughtException', err, err.stack);
+});
+
+process.on('Error', function (err) {
+    proxy.logger.error('catchError:', err, err.stack);
+});
+
+
 module.exports = proxy;

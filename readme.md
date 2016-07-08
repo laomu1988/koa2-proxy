@@ -10,6 +10,7 @@
 
 
 ## 安装
+安装node之后执行
 ```
 npm install koa2-proxy
 ```
@@ -42,10 +43,6 @@ proxy.on('end', function (ctx) {
 proxy.listen(3010);
 
 ```
-## Todo:
-* 请求的图片数据怎么保存到本地
-* 在浏览器中查看请求数据（代理或者本地等数据）
-* 命令行工具
 
 ## 增加属性
 * proxy.app koa的实例:proxy.app = new koa();
@@ -56,6 +53,7 @@ proxy.listen(3010);
 
 ## 增加函数
 * proxy.static(root) 静态文件服务器
+* proxy.when(conditions,callback) 增加中断和处理内容
 * proxy.mockfile(mockfile) 模拟文件路径
 * proxy.smarty({ext:'',data:data}) 解析smarty模板，data可以是json数据或者func,func参数为文件路径
 * ctx.hasSend() 判断是否发送过数据
@@ -69,3 +67,26 @@ proxy.listen(3010);
 * https-server-start  https服务器启动完成后触发
 * start: 请求开始时触发
 * end: 请求结束时触发
+
+
+## 本地开发
+执行**npm install** 安装依赖
+执行**npm run build** 编译src到lib目录
+
+
+## 注意问题
+* ctx.request.host不能直接修改，需要通过ctx.request.header.host修改
+
+## 待解决bug
+* ctx.request.url返回的地址有时带有host
+* parseError: 在远程加载gzip格式内容之后发送时出错
+* 本机设置代理之后websocket失效问题
+
+## Todo:
+* 完善文档
+* 通过websocket在浏览器界面中监控数据
+* 使用命令行启动或修改服务
+
+## 版本说明
+* **1.0.1** 增加proxy.when等函数，远程加载图片内容
+* **1.0.0** 基本版本定型

@@ -26,23 +26,12 @@ module.exports = function (_config, callback) {
     var proxy = this;
     var app = proxy.app;
     // 下载cert证书
-    if (config.loadCertUrl) {
-        app.use(function (ctx, next) {
-            ctx.logger.debug('middleware: loadcert ');
-            if (ctx.hasSend()) {
-                return next();
-            }
-            var url = 'http://' + ctx.request.host + ctx.request.url;
-            ctx.logger.debug('middleware: loadcerturl:', url);
-            if (url.indexOf(config.loadCertUrl) >= 0) {
-                ctx.response.status = 200;
-                ctx.response.body = config.cert;
-                ctx.response.header['content-type'] = 'application/x-x509-ca-cert';
-            }
-            return next();
-        });
-    }
-
+    proxy.when({fullUrl:config.loadCertUrl}, function(ctx){
+        ctx.logger.cert('Load Cert!');
+        ctx.response.status = 200;
+        ctx.response.body = config.cert;
+        ctx.response.header['content-type'] = 'application/x-x509-ca-cert';
+    });
 
     var httpServer = http.createServer(app.callback());
 
