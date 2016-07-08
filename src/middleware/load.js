@@ -3,13 +3,14 @@
  * 判断是否是本地文件
  **/
 var request = require('request');
+var fs = require('fs');
 
 function handleHeader(header) {
     if (!header) {
         return;
     }
     for (var attr in header) {
-        if (attr.trim() != attr) {
+        if (attr.trim().toLowerCase() != attr) {
             header[attr.trim()] = header[attr];
             delete header[attr];
         }
@@ -27,9 +28,9 @@ module.exports = function (config) {
         var uri = ctx.fullUrl();
 
         ctx.logger.log('请求网络地址：', uri, '               ');
-        ctx.request.header['accept-encoding'] = 'deflate'; // 取消gzip压缩
+        // ctx.request.header['accept-encoding'] = 'deflate'; // 取消gzip压缩
         ctx.request.header['connection'] = 'close'; // 取消keep-alive
-        //ctx.request.header['proxy-connection'] = 'close'; // 代理
+        // ctx.request.header['proxy-connection'] = 'close'; // 代理
 
         var reqdata = {
             uri: uri,
@@ -46,8 +47,16 @@ module.exports = function (config) {
                 try {
                     if (!err) {
                         ctx.logger.debug('load has response data.');
-                        ctx.response.set(handleHeader(response.headers));
+                        var header = handleHeader(response.headers);
+                        delete header['content-length'];
+                        ctx.response.set(header);
                         ctx.response.body = body;
+                        if (ctx.url.indexOf('commonitem') > 0) {
+                            ctx.notice('isBuffer:',Buffer.isBuffer(body));
+                            fs.writeFileSync(__dirname + '/../../temp/body.zip', body);
+                            fs.writeFileSync(__dirname + '/../../temp/header.txt', JSON.stringify(header,null,'    '));
+                        }
+
                     } else {
                         ctx.logger.error('middleware load data error: ', err);
                     }
