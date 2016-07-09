@@ -61,7 +61,7 @@ function startSocket(proxy, server) {
                 ctx.__socketid = count + '' + Date.now();
                 var data = {
                     id: ctx.__socketid,
-                    url: ctx.request.url,
+                    url: ctx.fullUrl(),
                     header: ctx.request.header
                 };
                 if (ctx.request.body) {
