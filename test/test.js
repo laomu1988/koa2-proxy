@@ -26,4 +26,4 @@ proxy.on('end', function (ctx) {
 
 proxy.listen(3010);
 
-proxy.browser();
+//proxy.browser();
