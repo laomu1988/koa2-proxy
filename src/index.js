@@ -53,7 +53,6 @@ proxy.emit = proxy.trigger = function () {
 proxy.use(extend.bind(proxy)());
 proxy.use(bodyParser())
 proxy.use(log.bind(proxy)());
-proxy.use(require('./middleware/limit.js').bind(proxy)(3));
 
 
 // 错误处理

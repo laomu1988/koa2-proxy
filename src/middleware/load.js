@@ -28,8 +28,8 @@ module.exports = function (config) {
         var uri = ctx.fullUrl();
 
         ctx.logger.log('请求网络地址：', uri, '               ');
-        // ctx.request.header['accept-encoding'] = 'deflate'; // 取消gzip压缩
-        ctx.request.header['connection'] = 'close'; // 取消keep-alive
+        ctx.request.header['accept-encoding'] = 'deflate'; // 取消gzip压缩
+        // ctx.request.header['connection'] = 'close'; // 取消keep-alive
         // ctx.request.header['proxy-connection'] = 'close'; // 代理
 
         var reqdata = {
@@ -48,17 +48,12 @@ module.exports = function (config) {
                     if (!err) {
                         ctx.logger.debug('load has response data.');
                         var header = handleHeader(response.headers);
-                        delete header['content-length'];
+                        delete header['content-length']; // 避免长度和设置body长度不一致问题
+                        delete header['transfer-encoding']; // 删除该字段，因为现在是下载完毕处理后才发送
                         ctx.response.set(header);
                         ctx.response.body = body;
-                        if (ctx.url.indexOf('commonitem') > 0) {
-                            ctx.notice('isBuffer:',Buffer.isBuffer(body));
-                            fs.writeFileSync(__dirname + '/../../temp/body.zip', body);
-                            fs.writeFileSync(__dirname + '/../../temp/header.txt', JSON.stringify(header,null,'    '));
-                        }
-
                     } else {
-                        ctx.logger.error('middleware load data error: ', err);
+                        ctx.logger.error('middleware load data error: ', err, err.stack);
                     }
                 } catch (e) {
                     ctx.logger.error('koa-proxy middleware load error:', e);
