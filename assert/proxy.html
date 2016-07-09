@@ -3,28 +3,31 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Test</title>
-	<script src="/socket.io.js"></script>
+	<link rel="stylesheet" href="proxy.css"/>
 </head>
 <body>
-<div>
-
+<div class="menu">
 </div>
-<script>
-	var socket = io('http://' + location.host);
-	socket.emit('ready');
+<div class="box">
+	<div class="list">
+	</div>
+	<div class="view">
+		<div class="menu">
+			<div class="btn">头部信息</div>
+			<div class="btn">返回body</div>
+		</div>
+		<textarea id="view">模仿代理软件，正在实现：
+			按时间，按域名 排序功能
+			筛选功能
+			网址栏可拖动
+			查看请求header，查看返回数据
+			自动发送请求
+		</textarea>
+	</div>
+</div>
+<script src="/socket.io.js"></script>
+<script src="/zepto.js"></script>
+<script type="text/babel" src="/proxy.js"></script>
 
-	socket.on('request', function (data) {
-		console.log('request:', data);
-	});
-	socket.on('response', function (data) {
-		console.log('response', data);
-		if (data.id) {
-			socket.emit('view', {id: data.id});
-		}
-	});
-	socket.on('view', function (data) {
-
-	});
-</script>
 </body>
 </html>
