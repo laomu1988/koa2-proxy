@@ -1,0 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body,
+.main,
+.app {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+}
+.box {
+  height: 100%;
+  width: 100%;
+  padding-bottom: 10px;
+  margin-top: 40px;
+}
+.list {
+  width: 200px;
+  float: left;
+  border-right: 1px solid #ccc;
+  height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+}
+.list .url {
+  font-size: 13px;
+  color: #333;
+  line-height: 25px;
+  height: 25px;
+  border-bottom: 1px solid #ccc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
+  padding-left: 10px;
+}
+.list .url.loading {
+  color: #666;
+}
+.list .url.fail {
+  color: #999;
+}
+.list .url.success {
+  color: #333;
+}
+.list .url.active {
+  background: #ccc;
+}
+.view {
+  overflow: hidden;
+  width: calc(100% - 201px);
+  height: 100%;
+  float: right;
+}
+.view .view-content {
+  height: calc(100% - 35px);
+}
+.view textarea {
+  width: 100%;
+  height: 100%;
+}
+.btn {
+  line-height: 30px;
+  height: 30px;
+  width: auto;
+  display: inline-block;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.btn.active {
+  color: #fff;
+  background: #00b35c;
+}

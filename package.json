@@ -32,7 +32,8 @@
     "babel-preset-stage-0": "^6.5.0",
     "co": "^4.6.0",
     "pem": "^1.8.3",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "electron-prebuilt": "^1.2.6"
   },
   "repository": {
     "type": "git",

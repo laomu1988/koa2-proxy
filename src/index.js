@@ -31,10 +31,6 @@ proxy.when = function () {
     app.use(require('./middleware/when').apply(proxy, arguments));
 };
 
-proxy.browser = function (server) {
-    require('./browser').bind(proxy)(server);
-};
-
 
 proxy.listen = listen.bind(proxy);
 proxy.logger = logger;
