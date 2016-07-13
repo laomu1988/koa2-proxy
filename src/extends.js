@@ -3,6 +3,7 @@ var isBinary = require('./method/isBinary');
 var isLocal = require('./method/isLocal');
 var sendFile = require('./method/sendFile');
 var fullUrl = require('./method/fullUrl');
+var zlib = require('zlib');
 
 
 function extendRequest(req) {
@@ -44,6 +45,24 @@ function extendRequest(req) {
     });
 }
 
+function extendResponse(response) {
+    var body = Object.getOwnPropertyDescriptor(response.__proto__.__proto__, 'body');
+    Object.defineProperties(response, {
+        body: {
+            get: function () {
+                console.log('body');
+                if (this._body && this.header && this.header['content-encoding']) {
+                    console.log('unzip body');
+                    return zlib.unzipSync(this._body);
+                }
+            },
+            set: body.set,
+            enumerable: true,
+            configurable: true
+        }
+    });
+}
+
 
 module.exports = function () {
     var proxy = this;
@@ -57,6 +76,7 @@ module.exports = function () {
         ctx.request.fullUrl = ctx.fullUrl;
         ctx.logger = proxy.logger;
         extendRequest(ctx.request);
+        extendResponse(ctx.response);
         return next();
     };
 }

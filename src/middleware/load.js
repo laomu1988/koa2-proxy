@@ -28,7 +28,7 @@ module.exports = function (config) {
         var uri = ctx.fullUrl();
 
         ctx.logger.log('请求网络地址：', uri, '               ');
-        ctx.request.header['accept-encoding'] = 'deflate'; // 取消gzip压缩
+        // ctx.request.header['accept-encoding'] = 'deflate'; // 取消gzip压缩
         // ctx.request.header['connection'] = 'close'; // 取消keep-alive
         // ctx.request.header['proxy-connection'] = 'close'; // 代理
 
