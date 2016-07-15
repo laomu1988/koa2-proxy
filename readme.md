@@ -90,10 +90,11 @@ proxy.listen(3010);
 * 使用命令行启动或修改服务
 
 ## 版本说明
-* **1.0.2(2016.07.15)**
+* **1.0.3(2016.07.15)**
     - 增加request.body
     - 请求form发送
     - 增加proxy.localip和proxy.localhost
     - 默认取消监听https,只有显示指示https时才启动https
+* **1.0.2** load模块bug修复
 * **1.0.1** 增加proxy.when等函数，远程加载图片内容
 * **1.0.0** 基本版本定型
