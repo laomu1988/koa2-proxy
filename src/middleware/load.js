@@ -39,7 +39,7 @@ module.exports = function (config) {
             encoding: null
         };
         if (ctx.request.body) {
-            reqdata.formData = ctx.request.body;
+            reqdata.form = ctx.request.body;
         }
 
         return new Promise(function (resolve, reject) {
