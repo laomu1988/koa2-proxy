@@ -29,7 +29,7 @@ module.exports = function (_config, callback) {
     var httpServer = http.createServer(app.callback());
 
 
-    if(config.https){
+    if (config.https) {
         // 下载cert证书
         proxy.when({fullUrl: config.loadCertUrl}, function (ctx) {
             ctx.logger.cert('Load Cert!');
@@ -100,6 +100,8 @@ module.exports = function (_config, callback) {
             return false;
         }
         proxy.port = config.port;
+        proxy.localip = ip.address();
+        proxy.localhost = proxy.localip + ':' + config.port;
         proxy.httpServer = httpServer;
         proxy.trigger('http-server-start');
 
@@ -109,7 +111,7 @@ module.exports = function (_config, callback) {
         if (typeof callback === 'function') {
             callback(err);
         } else {
-            console.log('start server at http://localhost:' + config.port, '  same as  http://' + ip.address() + ':' + config.port);
+            console.log('start server at http://localhost:' + proxy.port, '  same as  http://' + proxy.localhost);
         }
     });
 };
