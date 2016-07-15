@@ -4,7 +4,6 @@ var Path = require('path');
 
 function getContentType(filepath) {
     var ext = Path.extname(filepath);
-    console.log('setcontentType：', ext);
     switch (ext) {
         case '.html':
             return 'text/html;charset=utf-8';

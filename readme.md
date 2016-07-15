@@ -48,14 +48,17 @@ proxy.listen(3010);
 * proxy.app koa的实例:proxy.app = new koa();
 * proxy.httpServer  http服务器， 只有当http服务器启动后才会赋值（http-server-start事件）
 * proxy.httpsServer https服务器， 只有当http服务器启动后才会赋值（https-server-start事件）
+* proxy.localip 本地ip地址,listen后生效
+* proxy.localhost 本地ip地址+监听host, listen后生效
 * ctx.proxy  proxy
-
+* request.body 请求的form表单数据
 
 ## 增加函数
 * proxy.static(root) 静态文件服务器
 * proxy.when(conditions,callback) 增加中断和处理内容
 * proxy.mockfile(mockfile) 模拟文件路径
 * proxy.smarty({ext:'',data:data}) 解析smarty模板，data可以是json数据或者func,func参数为文件路径
+* proxy.listen(port|config) 启动监听端口,假如需同时启动https,可以proxy.listen({port:3000,https:true}),则会自动增加https监听
 * ctx.hasSend() 判断是否发送过数据
 * ctx.isLocal() 判断当前请求是否是请求本地文件
 * ctx.isBinary(filename) 判断本地文件是否是二进制文件
@@ -84,9 +87,13 @@ proxy.listen(3010);
 
 ## Todo:
 * 完善文档
-* 通过websocket在浏览器界面中监控数据
 * 使用命令行启动或修改服务
 
 ## 版本说明
+* **1.0.2(2016.07.15)**
+    - 增加request.body
+    - 请求form发送
+    - 增加proxy.localip和proxy.localhost
+    - 默认取消监听https,只有显示指示https时才启动https
 * **1.0.1** 增加proxy.when等函数，远程加载图片内容
 * **1.0.0** 基本版本定型

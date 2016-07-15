@@ -53,6 +53,7 @@ proxy.emit = proxy.trigger = function () {
 proxy.use(extend.bind(proxy)());
 proxy.use(bodyParser())
 proxy.use(log.bind(proxy)());
+logger.setLevel('notice');
 
 
 // 错误处理
