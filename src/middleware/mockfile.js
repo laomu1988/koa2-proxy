@@ -1,17 +1,10 @@
 /**
  * 判断是否存在本地文件数据,返回文件路径
- *    序为
- *  1.mockfile
- *  2.mockup
- *  3.node_module/bnjs/mock
- *         规则：
- *  config.mockup obj|str
- *      {attr: val} 假如路径以attr开头，则替换attr为val后判断文件是否存在
- *      str 则将mockup作为根目录，根据请求文件路径看是否匹配到本地文件
- *  config.mockfile txt             才会匹配，其他默认当做注释
- *      root folder                                        ）
+ *  mock本地文件
+ *  mockfile txt,只有规则名称匹配下列内容才会发送数据，其他默认当做注释
+ *      root folder     # 指定根目录(相对mockfile文件地址)
  *      rewrite reg rewriteUrl #匹配到正则，发送文件
- *      replace reg replaceWith                   内容部分
+ *      replace reg replaceWith  #修改请求url
  *      redirect reg redirectUrl #匹配到正则，则转发到新的url
  *      exec reg execFile
  * */

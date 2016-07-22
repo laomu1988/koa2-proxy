@@ -25,5 +25,7 @@ module.exports = function (filepath) {
             this.response.body = fs.readFileSync(filepath, 'utf8');
             this.response.header['content-type'] = getContentType(filepath);
         }
+        return true;
     }
+    return false;
 };
