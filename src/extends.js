@@ -4,25 +4,21 @@ var isLocal = require('./method/isLocal');
 var sendFile = require('./method/sendFile');
 var fullUrl = require('./method/fullUrl');
 
+function reqSet(filed, val) {
+    if (2 == arguments.length) {
+        if (Array.isArray(val)) val = val.map(String);
+        else val = String(val);
+        this.header[(field + '').toLowerCase()] = val;
+    } else {
+        for (const key in field) {
+            this.header[(key + '').toLowerCase()] = field[key];
+        }
+    }
+};
 
 function extendRequest(req) {
+    req.set = reqSet.bind(req);
     Object.defineProperties(req, {
-        // 增加request.set
-        setHeader: {
-            set: function (field, val) {
-                if (2 == arguments.length) {
-                    if (Array.isArray(val)) val = val.map(String);
-                    else val = String(val);
-                    this.header[(field + '').toLowerCase()] = val;
-                } else {
-                    for (const key in field) {
-                        this.setHeader(key, field[key]);
-                    }
-                }
-            },
-            enumerable: true,
-            configurable: true
-        },
         host: {
             get: function () {
                 const proxy = this.app.proxy;
