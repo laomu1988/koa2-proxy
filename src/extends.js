@@ -8,7 +8,7 @@ var fullUrl = require('./method/fullUrl');
 function extendRequest(req) {
     Object.defineProperties(req, {
         // 增加request.set
-        set: {
+        setHeader: {
             set: function (field, val) {
                 if (2 == arguments.length) {
                     if (Array.isArray(val)) val = val.map(String);
@@ -16,10 +16,12 @@ function extendRequest(req) {
                     this.header[(field + '').toLowerCase()] = val;
                 } else {
                     for (const key in field) {
-                        this.set(key, field[key]);
+                        this.setHeader(key, field[key]);
                     }
                 }
-            }
+            },
+            enumerable: true,
+            configurable: true
         },
         host: {
             get: function () {
@@ -32,9 +34,9 @@ function extendRequest(req) {
             set: function (host) {
                 const proxy = this.app.proxy;
                 if (proxy) {
-                    this.set('X-Forwarded-Host', host);
+                    this.header['X-Forwarded-Host'] = host;
                 } else {
-                    this.set('Host', host);
+                    this.header['host'] = host;
                 }
                 return host;
             },
