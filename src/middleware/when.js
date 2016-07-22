@@ -45,6 +45,10 @@ module.exports = function (conditions, callback) {
             if (key == 'phase') {
                 continue;
             }
+            if (key == 'local' && conditions[key] && !ctx.isLocal()) {
+                ctx.logger.debug('koa2-proxy.when rule not passed:', conditions[key]);
+                return next();
+            }
             if (!TestRule(GetVal(ctx, key), conditions[key])) {
                 ctx.logger.debug('koa2-proxy.when rule not passed:', conditions[key]);
                 return next();
