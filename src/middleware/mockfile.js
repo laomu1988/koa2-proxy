@@ -11,31 +11,32 @@
 var fs = require('fs');
 var Path = require('path');
 
-module.exports = function (config) {
-    if (typeof config == 'string') {
-        config = {mockfile: config}
-    }
-    config = config || {};
-    if (config.mockfile && !fs.existsSync(config.mockfile)) {
-        throw new Error('There is no File: ' + config.mockfile);
+module.exports = function (mockfile, needLocal) {
+    var proxy = this;
+    if (!mockfile) {
+        proxy.logger.error('koa-proxy.mockfile need one param: mockfile');
+        return;
     }
 
+    if (!fs.existsSync(mockfile)) {
+        proxy.logger.error('koa-proxy.mockfile: There is no File:' + mockfile);
+        return;
+    }
+    if (typeof needLocal == 'undefined') {
+        needLocal = true;
+    }
     return function (ctx, next) {
         ctx.logger.debug('middleware: mockfile');
         // 文件已发送
-        if (ctx.hasSend() || !ctx.isLocal()) {
+        if (ctx.hasSend() || (needLocal && !ctx.isLocal())) {
             return next();
         }
-        var promise = null;
-        if (config.mockfile) {
-            mockfile(ctx, config);
-        }
+        Mockfile(ctx, mockfile);
         return next();
     };
 };
-function mockfile(ctx, config) {
+function Mockfile(ctx, mockfile) {
     try {
-        var mockfile = config.mockfile;
         // console.log('mockfile:', config.mockfile);
         var content = fs.readFileSync(mockfile, 'utf8');
         var lines = content.split('\n');
@@ -71,14 +72,12 @@ function mockfile(ctx, config) {
                 if (path.charAt(0) == '/') {
                     if (root) {
                         path = root + path;
-                        path = Path.resolve(Path.dirname(config.mockfile), path);
-                    } else if (config.root) {
-                        path = config.root + path;
+                        path = Path.resolve(Path.dirname(mockfile), path);
                     } else {
                         path = Path.resolve(Path.dirname(require.main.filename), '.' + path);
                     }
                 } else {
-                    path = Path.resolve(Path.dirname(config.mockfile), path);
+                    path = Path.resolve(Path.dirname(mockfile), path);
                 }
                 ctx.logger.debug('judgemockpath:', path);
                 // console.log('mockTestPath:', path);
