@@ -9,6 +9,7 @@ function GetVal(ctx, key) {
     }
 }
 function TestRule(val, rule) {
+    console.log('TestRule:', val, rule);
     switch (typeof rule) {
         case 'string':
             return (val + '').indexOf(rule) >= 0;
@@ -40,17 +41,23 @@ module.exports = function (conditions, callback) {
     }
 
     return async function (ctx, next) {
+        ctx.logger.debug('koa2-proxy.when rule:', JSON.stringify(conditions));
         // 判断是否符合条件
         for (var key in conditions) {
             if (key == 'phase') {
                 continue;
             }
-            if (key == 'local' && conditions[key] && !ctx.isLocal()) {
-                ctx.logger.debug('koa2-proxy.when rule not passed:', conditions[key]);
-                return next();
+            if (key == 'local') {
+                if (!!conditions[key] != ctx.isLocal()) {
+                    ctx.logger.debug('koa2-proxy.when rule not passed:', key, conditions[key], ctx.isLocal());
+                    return next();
+                }
+                else {
+                    continue;
+                }
             }
             if (!TestRule(GetVal(ctx, key), conditions[key])) {
-                ctx.logger.debug('koa2-proxy.when rule not passed:', conditions[key]);
+                ctx.logger.debug('koa2-proxy.when rule not passed:', key, conditions[key]);
                 return next();
             }
         }

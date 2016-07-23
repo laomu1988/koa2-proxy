@@ -32,7 +32,7 @@ module.exports = function (_config, callback) {
     if (config.https) {
         // 下载cert证书
         proxy.when({fullUrl: config.loadCertUrl}, function (ctx) {
-            ctx.logger.cert('Load Cert!');
+            ctx.logger.notice('Load Cert!');
             ctx.response.status = 200;
             ctx.response.body = config.cert;
             ctx.response.header['content-type'] = 'application/x-x509-ca-cert';
