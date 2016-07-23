@@ -9,7 +9,6 @@ function GetVal(ctx, key) {
     }
 }
 function TestRule(val, rule) {
-    console.log('TestRule:', val, rule);
     switch (typeof rule) {
         case 'string':
             return (val + '').indexOf(rule) >= 0;
