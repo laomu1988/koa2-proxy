@@ -54,7 +54,7 @@ proxy.listen(3010);
 * request.body 请求的form表单数据
 
 ## 增加函数
-* proxy.static(root) 静态文件服务器
+* proxy.static(root,opts) 静态文件服务器
 * proxy.when(conditions,callback) 增加中断和处理内容
 * proxy.mockfile(mockfile) 模拟文件路径
 * proxy.smarty({ext:'',data:data}) 解析smarty模板，data可以是json数据或者func,func参数为文件路径
@@ -90,6 +90,9 @@ proxy.listen(3010);
 * 使用命令行启动或修改服务
 
 ## 版本说明
+* **1.0.4(2016.07.22)**
+    - proxy.when(conditions, callback):参数conditions增加local
+    - proxy.static(root, opts): 参数opts增加path和index
 * **1.0.3(2016.07.15)**
     - 增加request.body
     - 请求form发送
