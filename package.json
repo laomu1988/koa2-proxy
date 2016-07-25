@@ -4,7 +4,7 @@
   "description": "基于koa@2的代理工具，支持http和https，并且可以当做本地服务器使用",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/test.js",
     "build": "babel src --watch -d  lib"
   },
   "dependencies": {
@@ -32,7 +32,8 @@
     "babel-preset-stage-0": "^6.5.0",
     "co": "^4.6.0",
     "pem": "^1.8.3",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "supertest": "^1.2.0"
   },
   "repository": {
     "type": "git",

@@ -1,29 +1,28 @@
-var proxy = require(__dirname + './../lib/index');
+/**
+ * node测试基础: https://segmentfault.com/a/1190000002437819
+ *
+ * res.text 返回的文本内容
+ **/
 
+var assert = require('assert'),
+    request = require('supertest'),
+    proxy = require('./proxy.js');
 
-proxy.static(__dirname);
-//
-proxy.mockfile(__dirname + '/mockfile.txt');
-//
-//proxy.smarty({ext: '.html', data: {data: 'smarty html'}});
-
-proxy.when('index.html', function (ctx) {
-    console.log('you get index.html');
+describe('koa2-proxy', function () {
+    it('test static root', function (done) {
+        request(proxy.httpServer).get('/index.html').expect(200).end(done);
+    });
+    it('test static path: /test/index.html', function (done) {
+        request(proxy.httpServer).get('/test/index.html').expect(200).end(done);
+    });
+    it('test static path: /test2/index.html', function (done) {
+        request(proxy.httpServer).get('/test2/index.html').expect(200).end(done);
+    });
+    it('test static path: test2index.html', function (done) {
+        request(proxy.httpServer).get('test2/index.html').expect(404).end(done);
+    });
+    it('test static index: ["index.txt"]', function (done) {
+        request(proxy.httpServer).get('/index.txt').expect(200).end(done);
+    });
 });
-proxy.when({url: 'index.html', phase: 'response'}, function (ctx) {
-    console.log('you has get index.html');
-});
 
-
-proxy.on('start', function (ctx) {
-    console.log('start: ', ctx.request.url, ctx.isLocal(), ctx.isBinary(ctx.request.url));
-    console.log('body', ctx.request.body);
-});
-proxy.on('end', function (ctx) {
-    console.log('end: ', ctx.request.url);
-});
-
-
-proxy.listen(3010);
-
-//proxy.browser();

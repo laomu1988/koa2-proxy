@@ -27,7 +27,7 @@ module.exports = function (_config, callback) {
     var proxy = this;
     var app = proxy.app;
     var httpServer = http.createServer(app.callback());
-
+    proxy.httpServer = httpServer;
 
     if (config.https) {
         // 下载cert证书
@@ -102,7 +102,6 @@ module.exports = function (_config, callback) {
         proxy.port = config.port;
         proxy.localip = ip.address();
         proxy.localhost = proxy.localip + ':' + config.port;
-        proxy.httpServer = httpServer;
         proxy.trigger('http-server-start');
 
         // 添加自动加载
