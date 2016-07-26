@@ -5,13 +5,13 @@ var koa = require('koa');
 var bodyParser = require('koa-bodyparser');
 var ip = require('ip');
 var listen = require('./listen');
-var extend = require('./extends');
 var logger = require('logger-color');
 var log = require('./log');
 var proxy = {};
 var app = new koa;
 proxy.app = app;
 proxy.use = app.use.bind(app);
+
 
 proxy.static = function () {
     app.use(require('./middleware/static').apply(proxy, arguments));
@@ -50,7 +50,8 @@ proxy.emit = proxy.trigger = function () {
 };
 
 // 初始化
-proxy.use(extend.bind(proxy)());
+require('./extends_proxy')(proxy);
+proxy.use(require('./extends_ctx').bind(proxy)());
 proxy.use(bodyParser())
 proxy.use(log.bind(proxy)());
 logger.setLevel('notice');
