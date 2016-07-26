@@ -41,7 +41,6 @@ proxy.on('end', function (ctx) {
 
 // 监听端口
 proxy.listen(3010);
-
 ```
 
 ## 增加属性
@@ -90,6 +89,8 @@ proxy.listen(3010);
 * 使用命令行启动或修改服务
 
 ## 版本说明
+* **1.0.5(2016.07.26)**
+    - proxy.smarty({ext:,root:,data:}): 完善smarty函数
 * **1.0.4(2016.07.22)**
     - proxy.when(conditions, callback):参数conditions增加local
     - proxy.static(root, opts): 参数opts增加path和index

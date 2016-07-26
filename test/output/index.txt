@@ -1,0 +1,1 @@
+测试static的options中index配置
