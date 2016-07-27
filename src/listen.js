@@ -1,6 +1,24 @@
 /**
- * 监听端口
- * http和https
+ * 启动监听端口,启动http和https服务器和代理,默认不启动https代理
+ * @function listen
+ * @param {number|object} config 当为number时,表示http服务器端口号,默认3000。
+ *          当为object时,存在下列参数
+ * @param {number} config.port http服务器端口号
+ * @param {boolean} config.https 是否启动https代理,默认不启动
+ * @param {string} config.loadCertUrl 下载密匙的链接,只要配置代理后访问带有该链接的地址就可以下载密匙,默认: proxy.com
+ * @param {string} config.key https服务器的密匙,可省略
+ * @param {string} config.cert https服务器的公匙,可省略(密匙和公匙必须配对)
+ * @param {function} callback 启动http服务器后的回调函数,参数err
+ *
+ * @example
+ * var proxy = require('koa2-proxy');
+ * proxy.static(__dirname + '/output/');
+ * proxy.listen(8000);
+ * @example
+ * // 启动https代理,则可以如下配置
+ * var proxy = require('koa2-proxy');
+ * proxy.static(__dirname + '/output/');
+ * proxy.listen({port: 8000,https: true});
  **/
 'use strict';
 var http = require('http');

@@ -45,7 +45,8 @@ function extendRequest(req) {
 
 module.exports = function () {
     var proxy = this;
-    return function (ctx, next) {
+    return async function (ctx, next) {
+        ctx.logger.debug('middleware:log start');
         ctx.proxy = proxy;
         ctx.hasSend = hasSend.bind(ctx);
         ctx.isBinary = isBinary.bind(ctx);
@@ -55,6 +56,22 @@ module.exports = function () {
         ctx.request.fullUrl = ctx.fullUrl;
         ctx.logger = proxy.logger;
         extendRequest(ctx.request);
-        return next();
+
+        proxy.trigger('start', ctx);
+        var start = new Date;
+        try {
+            await next();
+        } catch (e) {
+            console.log(e);
+        }
+        var ms = new Date - start;
+        ctx.set('X-Response-Time', ms + 'ms');
+        // console.log('finish:', ctx.response.status);
+        if (typeof ctx.response.status == 'undefined' && !ctx.response.body) {
+            ctx.response.status = 404;
+            ctx.response.body = 'not found';
+        }
+        proxy.trigger('end', ctx);
+        ctx.logger.debug('middleware:log end');
     };
 }

@@ -1,10 +1,12 @@
 /**
- * 匹配本地文件，发送文件
- *
- * config
- *   root: 项目根目录
- *   defaultIndex: 'index.html'
- *   sendList: ''
+ * 创建静态文件服务器
+ * @function static
+ * @param {string} root 静态文件根目录
+ * @param {object} opts 其他可选参数
+ * @param {string} opts.path  匹配的路径,匹配到该路径时,匹配后剩余的路径存在文件时才发送文件,默认为空
+ * @param {string|array}  opts.index  假如浏览的是目录,则自动发送其下存在的文件,默认为index.html
+ * @example
+ * proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
  * */
 
 var fs = require('fs');

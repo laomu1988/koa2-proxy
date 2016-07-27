@@ -7,6 +7,10 @@ var ip = require('ip');
 var listen = require('./listen');
 var logger = require('logger-color');
 var log = require('./log');
+/**
+ * 全局内容 proxy
+ * @module proxy
+ * */
 var proxy = {};
 var app = new koa;
 proxy.app = app;
@@ -50,11 +54,10 @@ proxy.emit = proxy.trigger = function () {
 };
 
 // 初始化
-require('./extends_proxy')(proxy);
-proxy.use(require('./extends_ctx').bind(proxy)());
-proxy.use(bodyParser())
-proxy.use(log.bind(proxy)());
 logger.setLevel('notice');
+require('./extends_proxy')(proxy);
+proxy.use(bodyParser());
+proxy.use(require('./extends_ctx').bind(proxy)());
 
 
 // 错误处理
