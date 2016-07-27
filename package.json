@@ -14,7 +14,8 @@
     "request": "^2.72.0",
     "smarty4js": "^0.1.8",
     "babel-core": "^6.10.4",
-    "babel-polyfill": "^6.9.1"
+    "babel-polyfill": "^6.9.1",
+    "pem": "^1.8.3"
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
