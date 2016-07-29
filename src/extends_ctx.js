@@ -46,6 +46,7 @@ function extendRequest(req) {
 module.exports = function () {
     var proxy = this;
     return async function (ctx, next) {
+        ctx.logger = proxy.logger;
         ctx.logger.debug('middleware:log start');
         ctx.proxy = proxy;
         ctx.hasSend = hasSend.bind(ctx);
@@ -54,7 +55,6 @@ module.exports = function () {
         ctx.sendFile = sendFile.bind(ctx);
         ctx.fullUrl = fullUrl.bind(ctx);
         ctx.request.fullUrl = ctx.fullUrl;
-        ctx.logger = proxy.logger;
         extendRequest(ctx.request);
 
         proxy.trigger('start', ctx);

@@ -3,10 +3,8 @@ require("babel-polyfill");
 
 var koa = require('koa');
 var bodyParser = require('koa-bodyparser');
-var ip = require('ip');
 var listen = require('./listen');
 var logger = require('logger-color');
-var log = require('./log');
 /**
  * 全局内容 proxy
  * @module proxy
