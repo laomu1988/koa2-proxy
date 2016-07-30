@@ -1,0 +1,6 @@
+{
+  "errno": 0,
+  "data": {
+    "inline": "__inline__ ./inline.json"
+  }
+}

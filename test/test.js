@@ -46,5 +46,21 @@ describe('koa2-proxy.smarty', function () {
             }
         });
     });
+
+    it('smarty read json inline', function (done) {
+        this.timeout(5000);
+        // 设置超时时间
+        request(proxy.httpServer).get('/smarty-inline').expect(200).end(function (err, res) {
+            if (err) return done(err);
+            // console.log(res.text);
+            try {
+                expect(res.text).to.include('smarty-title');
+                expect(res.text).include('***this is an inline json***');
+                done();
+            } catch (e) {
+                done(e);
+            }
+        });
+    });
 });
 

@@ -6,15 +6,34 @@ var Path = require('path');
 var fs = require('fs');
 var s = new smarty();
 
+
+// 解析带有__inline__的json内容
+function readJSON(filepath) {
+    if (!fs.existsSync(filepath)) {
+        return '';
+    }
+    // json数据文件路径
+    var str = fs.readFileSync(filepath, 'utf8');
+    if (str.indexOf('__inline__') >= 0) {
+        str = str.replace(/\"\s*__inline__[\s]*([^\n")]*)["]/g, function (str, newPath) {
+            // console.log('inline-file path:', Path.resolve(Path.dirname(filepath), newPath));
+            return readJSON(Path.resolve(Path.dirname(filepath), newPath));
+        });
+    }
+    return str;
+}
+
+
 function handleData(data, path, ctx) {
     var newData;
     if (typeof data == 'string') {
         // config.data为字符串时,代表json数据文件路径
-        newData = fs.readFileSync(Path.resolve(config.root, './' + config.data));
+        newData = readJSON(data);
         try {
-            newData = JSON.parser(newData);
+            // console.log(newData);
+            newData = JSON.parse(newData);
         } catch (e) {
-            ctx.logger.warning('koa2-proxy: proxy.smarty JSON.parser file to json error: file ', config.data);
+            ctx.logger.warning('koa2-proxy: proxy.smarty JSON.parse file to json error: file ', data, e);
         }
         return newData;
     } else if (typeof data == 'function') {

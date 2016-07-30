@@ -6,6 +6,8 @@ function getContentType(filepath) {
     var ext = Path.extname(filepath);
     switch (ext) {
         case '.html':
+        case '.htm':
+        case '.tpl':
             return 'text/html;charset=utf-8';
         case '.css':
             return 'text/css;charset=UTF-8;';

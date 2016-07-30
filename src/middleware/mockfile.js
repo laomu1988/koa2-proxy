@@ -1,12 +1,14 @@
 /**
- * 判断是否存在本地文件数据,返回文件路径
- *  mock本地文件
- *  mockfile txt,只有规则名称匹配下列内容才会发送数据，其他默认当做注释
+ *  匹配规则之后发送模拟数据,主要用来mock请求数据
+ *  @function mockfile
+ *  @param {string} mockfile 匹配规则文件路径
+ *      只有规则名称匹配下列内容才会发送数据，其他默认当做注释
  *      root folder     # 指定根目录(相对mockfile文件地址)
  *      rewrite reg rewriteUrl #匹配到正则，发送文件
- *      replace reg replaceWith  #修改请求url
+ *      replace reg replaceWith  #修改请求url,替换reg的内容为replaceWith
  *      redirect reg redirectUrl #匹配到正则，则转发到新的url
  *      exec reg execFile
+ *  @param {boolean} needLocal 是否需要是本地请求,默认true,主要用来避免代理时污染代理请求
  * */
 var fs = require('fs');
 var Path = require('path');

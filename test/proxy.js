@@ -9,7 +9,7 @@ proxy.smarty(
     {
         root: __dirname + '/output',
         ext: '.tpl',
-        data: {data: 'smarty html'}
+        data: __dirname + '/mockup/index.json'
     });
 //
 // proxy.when('index.html', function (ctx) {
