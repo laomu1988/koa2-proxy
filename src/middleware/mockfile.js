@@ -52,10 +52,15 @@ function Mockfile(ctx, mockfile) {
             if (params.length >= 3) {
                 var path = ctx.url;
                 // console.log('mockrule: ', params);
-                var reg = new RegExp(params[1]), method = params[0];
-                if ((method !== 'replace' && method !== 'redirect' && method !== 'rewrite' && method !== 'exec') || !reg.test(path)) {
+                var method = params[0];
+                if ((method !== 'replace' && method !== 'redirect' && method !== 'rewrite' && method !== 'exec')) {
                     continue;
                 }
+                var reg = new RegExp(params[1]);
+                if (!reg.test(path)) {
+                    continue;
+                }
+                
                 if (method === 'redirect') {
                     //res.redirect(params[2]);
                     // console.log('redirect:', params[2]);
