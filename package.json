@@ -1,6 +1,6 @@
 {
   "name": "koa2-proxy",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "基于koa@2的代理工具，支持http和https，并且可以当做本地服务器使用",
   "main": "lib/index.js",
   "scripts": {
