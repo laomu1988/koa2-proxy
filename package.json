@@ -1,6 +1,6 @@
 {
   "name": "koa2-proxy",
-  "version": "1.0.6",
+  "version": "1.0.9",
   "description": "基于koa@2的代理工具，支持http和https，并且可以当做本地服务器使用",
   "main": "lib/index.js",
   "scripts": {
@@ -8,14 +8,15 @@
     "build": "babel src --watch -d  lib"
   },
   "dependencies": {
-    "koa": "^2.0.0",
-    "koa-bodyparser": "^3.1.0",
-    "regenerator": "^0.8.46",
-    "request": "^2.72.0",
-    "smarty4js": "^0.1.8",
     "babel-core": "^6.10.4",
     "babel-polyfill": "^6.9.1",
-    "pem": "^1.8.3"
+    "check-update": "0.0.8",
+    "koa": "^2.0.0",
+    "koa-bodyparser": "^3.1.0",
+    "pem": "^1.8.3",
+    "regenerator": "^0.8.46",
+    "request": "^2.72.0",
+    "smarty4js": "^0.1.8"
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
