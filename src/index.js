@@ -5,10 +5,6 @@ var koa = require('koa');
 var bodyParser = require('koa-bodyparser');
 var listen = require('./listen');
 var logger = require('logger-color');
-/**
- * 全局内容 proxy
- * @module proxy
- * */
 var proxy = {};
 var app = new koa;
 proxy.app = app;

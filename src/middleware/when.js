@@ -1,11 +1,12 @@
 /**
  * 当匹配路径时,回调
- * @function when
+ * @function proxy.when(condition, callback)
+ * @index 100
  * @param {string|reg|object} conditions 当为string时,表示匹配路径,当为object时,拥有下列参数
  * @param {string} conditions.url
  * @param {string} conditions.fullUrl
- * @param {string} conditions.phase
- * @param {string} conditions.phase
+ * @param {string} conditions.phase 匹配阶段
+ * @parma {function} callback 当匹配
  * */
 function GetVal(ctx, key) {
     switch (key) {
