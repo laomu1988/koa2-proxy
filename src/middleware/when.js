@@ -1,12 +1,21 @@
 /**
- * 当匹配路径时,回调
+ * 当请求的内容和condition匹配时,执行callback
  * @function proxy.when(condition, callback)
  * @index 100
  * @param {string|reg|object} conditions 当为string时,表示匹配路径,当为object时,拥有下列参数
- * @param {string} conditions.url
- * @param {string} conditions.fullUrl
- * @param {string} conditions.phase 匹配阶段
- * @parma {function} callback 当匹配
+ *        {string} conditions.url
+ *        {string} conditions.fullUrl
+ *        {string} conditions.phase 匹配阶段
+ * @param {function} callback 匹配时执行的函数,参数ctx
+ *
+ * @example test.html的内容设置为test
+ * proxy.when('test.html',function(ctx){
+ *      ctx.response.body = 'test';
+ * });
+ * @example test.html的内容增加一个div
+ * proxy.when({url:'test.html',phase: 'response' },function(ctx){
+ *      ctx.response.body +='<div>test</div>';
+ * });
  * */
 function GetVal(ctx, key) {
     switch (key) {
