@@ -1,11 +1,25 @@
 /**
- * 当匹配路径时,回调
- * @function when
- * @param {string|reg|object} conditions 当为string时,表示匹配路径,当为object时,拥有下列参数
- * @param {string} conditions.url
- * @param {string} conditions.fullUrl
- * @param {string} conditions.phase
- * @param {string} conditions.phase
+ * 当请求的内容和condition匹配时,执行callback
+ * @function proxy.when([condition,] callback)
+ * @index 100
+ * @param condition
+ *        {string|reg} condition url包含string或者reg.test(url)为tru时,将执行callback
+ *        {object} condition 匹配条件列表,其属性值可以是header的字段或者host,fullUrl,url,phase,method等
+ *            - {string|reg|function} condition.url 匹配url(host之后的部分)
+ *            - {string|reg|function} condition.fullUrl (匹配)
+ *            - {string} condition.phase 匹配阶段,request或者response,默认request
+ *            - {string|reg|function} condition.cookie
+ *            - {string|reg|function} ...  匹配其他任意header字段
+ * @param {function} callback 匹配时执行的函数,参数ctx
+ *
+ * @example test.html的内容设置为test
+ * proxy.when('test.html',function(ctx){
+ *      ctx.response.body = 'test';
+ * });
+ * @example test.html的内容增加一个div
+ * proxy.when({url:'test.html',phase: 'response' },function(ctx){
+ *      ctx.response.body +='<div>test</div>';
+ * });
  * */
 function GetVal(ctx, key) {
     switch (key) {
@@ -14,6 +28,10 @@ function GetVal(ctx, key) {
         case 'url':
             return ctx.request.url;
         default:
+            var val = ctx.request[key];
+            if (typeof val === 'string') {
+                return val.toLowerCase();
+            }
             return ctx.get(key);
     }
 }
@@ -34,22 +52,31 @@ function TestRule(val, rule) {
 
 module.exports = function (conditions, callback) {
     var proxy = this;
-    if (!conditions || !callback) {
+    if (!conditions && !callback) {
         proxy.logger.error('koa2-proxy.when need tow param: conditions and callback');
         return;
     }
-    if (typeof callback !== 'function') {
-        proxy.logger.error('koa2-proxy.when the second param need function not ' + callback);
-        return;
+    if (typeof conditions == 'function') {
+        callback = conditions;
+        conditions = null;
     }
-    if (typeof conditions == 'string' || conditions instanceof RegExp) {
+    else if (typeof conditions == 'string' || conditions instanceof RegExp) {
         conditions = {
             fullUrl: conditions
         }
     }
+    if (typeof callback !== 'function') {
+        proxy.logger.error('koa2-proxy.when([condition,] callback) callback need to be function not ' + callback);
+        return;
+    }
+
 
     return async function (ctx, next) {
         ctx.logger.debug('koa2-proxy.when rule:', JSON.stringify(conditions));
+        if (!conditions) {
+            // 不存在conditions时,在请求阶段响应所有请求
+            return next(callback(ctx));
+        }
         // 判断是否符合条件
         for (var key in conditions) {
             if (key == 'phase') {

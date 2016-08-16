@@ -41,5 +41,15 @@ describe('koa2-proxy.when', function () {
             done(err);
         });
     });
+
+    it('test when method', function (done) {
+        proxy.when({url: /when_test\/test_method/, method: 'post'}, function (ctx) {
+            ctx.response.body = 'when test method';
+        });
+        request(proxy.httpServer).post('/when_test/test_method.js').expect(200).end(function (err, res) {
+            expect(res.text).to.include('when test method');
+            done(err);
+        });
+    });
 });
 

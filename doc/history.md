@@ -1,0 +1,21 @@
+## 版本更新
+* **1.0.10(2016.08.12)**
+    - 使用lazy-doc生成文档
+    - when增加支持method和host等
+    - when(condition,callback)的condition可以忽略,这时所有的请求都将调用callback
+* **1.0.9(2016.08.11)**
+    - 检查是否存在新版本并提示
+    - 修复一些bug;
+* **1.0.5(2016.07.26)**
+    - proxy.smarty({ext:,root:,data:}): 完善smarty函数
+* **1.0.4(2016.07.22)**
+    - proxy.when(conditions, callback):参数conditions增加local
+    - proxy.static(root, opts): 参数opts增加path和index
+* **1.0.3(2016.07.15)**
+    - 增加request.body
+    - 请求form发送
+    - 增加proxy.localip和proxy.localhost
+    - 默认取消监听https,只有显示指示https时才启动https
+* **1.0.2** load模块bug修复
+* **1.0.1** 增加proxy.when等函数，远程加载图片内容
+* **1.0.0** 代理功能
