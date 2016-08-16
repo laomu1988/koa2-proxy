@@ -52,22 +52,31 @@ function TestRule(val, rule) {
 
 module.exports = function (conditions, callback) {
     var proxy = this;
-    if (!conditions || !callback) {
+    if (!conditions && !callback) {
         proxy.logger.error('koa2-proxy.when need tow param: conditions and callback');
         return;
     }
-    if (typeof callback !== 'function') {
-        proxy.logger.error('koa2-proxy.when the second param need function not ' + callback);
-        return;
+    if (typeof conditions == 'function') {
+        callback = conditions;
+        conditions = null;
     }
-    if (typeof conditions == 'string' || conditions instanceof RegExp) {
+    else if (typeof conditions == 'string' || conditions instanceof RegExp) {
         conditions = {
             fullUrl: conditions
         }
     }
+    if (typeof callback !== 'function') {
+        proxy.logger.error('koa2-proxy.when([condition,] callback) callback need to be function not ' + callback);
+        return;
+    }
+
 
     return async function (ctx, next) {
         ctx.logger.debug('koa2-proxy.when rule:', JSON.stringify(conditions));
+        if (!conditions) {
+            // 不存在conditions时,在请求阶段响应所有请求
+            return next(callback(ctx));
+        }
         // 判断是否符合条件
         for (var key in conditions) {
             if (key == 'phase') {

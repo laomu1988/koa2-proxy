@@ -182,6 +182,8 @@ proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
 ## 版本更新
 * **1.0.10(2016.08.12)**
     - 使用lazy-doc生成文档
+    - when增加支持method和host等
+    - when(condition,callback)的condition可以忽略,这时所有的请求都将调用callback
 * **1.0.9(2016.08.11)**
     - 检查是否存在新版本并提示
     - 修复一些bug;
