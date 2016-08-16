@@ -1,6 +1,6 @@
 # 测试规则
 root ./mockup
-redirect ^\/$ mockfile.js
+redirect ^\/$ mockfile.re.js
 
 rewrite mockfile mockup/mockfile.json
 replace .json .js

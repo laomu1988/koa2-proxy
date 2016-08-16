@@ -1,6 +1,6 @@
 /**
  * 创建静态文件服务器
- * @function static
+ * @function proxy.static(root, opts)
  * @param {string} root 静态文件根目录
  * @param {object} opts 其他可选参数
  * @param {string} opts.path  匹配的路径,匹配到该路径时,匹配后剩余的路径存在文件时才发送文件,默认为空

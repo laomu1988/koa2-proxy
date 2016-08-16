@@ -104,6 +104,7 @@ proxy.static(__dirname + '/output/');
 proxy.listen(8000);
 ```
 
+
 **示例:**
 
 ```
@@ -113,32 +114,39 @@ proxy.static(__dirname + '/output/');
 proxy.listen({port: 8000,https: true});
 ```
 
-###  proxy.when(condition, callback)
+
+###  proxy.when([condition,] callback)
 
 当请求的内容和condition匹配时,执行callback
 
-*  {string|reg|object} conditions 当为string时,表示匹配路径,当为object时,拥有下列参数
-       {string} conditions.url
-       {string} conditions.fullUrl
-       {string} conditions.phase 匹配阶段
+*  condition
+       {string|reg} condition url包含string或者reg.test(url)为tru时,将执行callback
+       {object} condition 匹配条件列表,其属性值可以是header的字段或者host,fullUrl,url,phase,method等
+           - {string|reg|function} condition.url 匹配url(host之后的部分)
+           - {string|reg|function} condition.fullUrl (匹配)
+           - {string} condition.phase 匹配阶段,request或者response,默认request
+           - {string|reg|function} condition.cookie
+           - {string|reg|function} ...  匹配其他任意header字段
 *  {function} callback 匹配时执行的函数,参数ctx
 
 
-**示例:**
+**示例:** test.html的内容设置为test
 
-``` test.html的内容设置为test
+```
 proxy.when('test.html',function(ctx){
      ctx.response.body = 'test';
 });
 ```
 
-**示例:**
 
-``` test.html的内容增加一个div
+**示例:** test.html的内容增加一个div
+
+```
 proxy.when({url:'test.html',phase: 'response' },function(ctx){
      ctx.response.body +='<div>test</div>';
 });
 ```
+
 
 ###  proxy.mockfile(mockfile, needLocal)
 
@@ -155,7 +163,7 @@ proxy.when({url:'test.html',phase: 'response' },function(ctx){
 *  {boolean} needLocal 是否需要是本地请求,默认true,主要用来避免代理时污染代理请求
 
 
-###  static
+###  proxy.static(root, opts)
 
 创建静态文件服务器
 
@@ -170,6 +178,7 @@ proxy.when({url:'test.html',phase: 'response' },function(ctx){
 ```
 proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
 ```
+
 ## 版本更新
 * **1.0.10(2016.08.12)**
     - 使用lazy-doc生成文档

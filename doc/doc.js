@@ -1,14 +1,8 @@
 var lazy = require('lazy-doc');
 var fs = require('fs');
-var files = ['readme.md', 'api.md', 'history.md'];
-lazy(__dirname + '/../src/', __dirname + '/api.md');
 
+var out = fs.readFileSync(__dirname + '/readme.md');
+out += lazy(__dirname + '/../src/');
+out += fs.readFileSync(__dirname + '/history.md');
 
-setTimeout(function () {
-    var out = '';
-    files.forEach(function (file) {
-        out += fs.readFileSync(__dirname + '/' + file, 'utf8');
-    });
-    
-    fs.writeFileSync(__dirname + '/../readme.md', out);
-}, 200);
+fs.writeFileSync(__dirname + '/../readme.md', out);
