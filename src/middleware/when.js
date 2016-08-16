@@ -1,11 +1,15 @@
 /**
  * 当请求的内容和condition匹配时,执行callback
- * @function proxy.when(condition, callback)
+ * @function proxy.when([condition,] callback)
  * @index 100
- * @param {string|reg|object} conditions 当为string时,表示匹配路径,当为object时,拥有下列参数
- *        {string} conditions.url
- *        {string} conditions.fullUrl
- *        {string} conditions.phase 匹配阶段
+ * @param condition
+ *        {string|reg} condition url包含string或者reg.test(url)为tru时,将执行callback
+ *        {object} condition 匹配条件列表,其属性值可以是header的字段或者host,fullUrl,url,phase,method等
+ *            - {string|reg|function} condition.url 匹配url(host之后的部分)
+ *            - {string|reg|function} condition.fullUrl (匹配)
+ *            - {string} condition.phase 匹配阶段,request或者response,默认request
+ *            - {string|reg|function} condition.cookie
+ *            - {string|reg|function} ...  匹配其他任意header字段
  * @param {function} callback 匹配时执行的函数,参数ctx
  *
  * @example test.html的内容设置为test
@@ -24,6 +28,10 @@ function GetVal(ctx, key) {
         case 'url':
             return ctx.request.url;
         default:
+            var val = ctx.request[key];
+            if (typeof val === 'string') {
+                return val.toLowerCase();
+            }
             return ctx.get(key);
     }
 }
