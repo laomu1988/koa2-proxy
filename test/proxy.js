@@ -1,7 +1,7 @@
 var proxy = require(__dirname + './../lib/index.js');
 
 
-
+proxy.static(__dirname + '/output');
 //
 // proxy.when('index.html', function (ctx) {
 //     console.log('you get index.html');
