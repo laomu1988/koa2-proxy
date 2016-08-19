@@ -169,8 +169,12 @@ proxy.when({url:'test.html',phase: 'response' },function(ctx){
 
 *  {string} root 静态文件根目录
 *  {object} opts 其他可选参数
-*  {string} opts.path  匹配的路径,匹配到该路径时,匹配后剩余的路径存在文件时才发送文件,默认为空
-*  {string|array}  opts.index  假如浏览的是目录,则自动发送其下存在的文件,默认为index.html
+         - opts.path {string}  匹配的路径,匹配到该路径时,匹配后剩余的路径存在文件时才发送文件,默认为空
+         - opts.index {string|array} 假如浏览的是目录,则自动发送其下存在的文件,默认为index.html,可以指定多个文件,例如["index.html","index.htm"]
+         - opts.list  当浏览的是目录并且不存在默认发送文件时,发送目录下文件列表
+             - {boolean}  是否发送文件列表
+             - {string} 内容不为空时发送,opt.list将一起发送
+             - {function} 自定义发送内容格式,参数(list, pathname, localFolder)
 
 
 **示例:**
@@ -179,7 +183,15 @@ proxy.when({url:'test.html',phase: 'response' },function(ctx){
 proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
 ```
 
+**history**
+
+```
+   - 2016.08.18 增加opts.list,配置可展示目录下文件列表
+```
+
 ## 版本更新
+* **1.0.11(2016.08.18)**
+    - proxy.static增加显示文件夹内文件列表
 * **1.0.10(2016.08.12)**
     - 使用lazy-doc生成文档
     - when增加支持method和host等
