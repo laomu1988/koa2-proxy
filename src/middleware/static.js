@@ -77,7 +77,7 @@ module.exports = function (root, config) {
                                 body += '<h1><a href="javascript:history.go(0);" title="点击刷新">' + pathname + '</a></h1>';
                                 body += '<p><a href="' + pathname + '../" title="返回上一级">返回上一级</a></p><hr><br>';
                                 for (var i = 0; i < files.length; i++) {
-                                    body += '<p><a href="' + pathname + files[i] + '" >' + files[i] + '</a></p><br>';
+                                    body += '<p><a href="' + pathname + files[i] + '" >' + files[i] + '</a></p>';
                                 }
                             } else if (listType == 'function') {
                                 body = config.list(list, pathname, path);
