@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "istanbul cover _mocha",
-    "build": "babel src --watch -d  lib",
+    "build": "babel src -d  lib",
     "doc": "node doc/doc.js"
   },
   "dependencies": {

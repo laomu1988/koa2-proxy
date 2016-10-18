@@ -10,8 +10,12 @@ function handleHeader(header) {
         return;
     }
     for (var attr in header) {
-        if (attr.trim().toLowerCase() != attr) {
-            header[attr.trim()] = header[attr];
+        var trim = attr.trim();
+        if (trim.toLowerCase() == 'content-length') {
+            delete header[attr];
+        }
+        else if (trim != attr) {
+            header[trim] = header[attr];
             delete header[attr];
         }
     }

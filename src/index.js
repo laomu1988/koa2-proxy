@@ -1,6 +1,6 @@
 require("babel-core/register");
 require("babel-polyfill");
-require('./assist/update');
+// require('./assist/update');
 var koa = require('koa');
 var bodyParser = require('koa-bodyparser');
 var listen = require('./listen');
