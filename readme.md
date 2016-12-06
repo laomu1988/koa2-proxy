@@ -28,16 +28,18 @@ proxy.mockfile(__dirname + '/mockfile.txt');
 // 解析smarty模板
 proxy.smarty({ext: '.html', data: {data: 'smarty html'}});
 
-//
+// 请求开始时转发本地请求到网络
 proxy.on('start', function (ctx) {
     console.log('start: ', ctx.request.url, ctx.isLocal());
-    // 请求开始时转发本地请求到网络
     ctx.request.host = 'www.koa2.com';
 });
-proxy.on('end', function (ctx) {
-    // 请求结束时
-    console.log('end: ', ctx.request.url);
+// 请求结束时输出状态
+bnjs.on('end', function (ctx) {
+    console.log('end: ' + ctx.response.status);
+    console.log('end: ' + ctx.response.get('content-type'));
+    // console.log('end: ' + ctx.response.body);
 });
+
 
 // 监听端口
 proxy.listen(3010);
@@ -163,6 +165,23 @@ proxy.when({url:'test.html',phase: 'response' },function(ctx){
 *  {boolean} needLocal 是否需要是本地请求,默认true,主要用来避免代理时污染代理请求
 
 
+**示例:** 配置某个文件作为模拟规则文件
+
+```
+bnjs.mockfile(__dirname + '/server.conf');
+```
+
+
+**示例:** 部分路径不使用模拟文件配置
+
+```
+bnjs.when('/test1/',function (ctx) {
+    ctx.mockfile = false;
+});
+bnjs.mockfile(__dirname + '/server.conf');
+```
+
+
 ###  proxy.static(root, opts)
 
 创建静态文件服务器
@@ -190,6 +209,9 @@ proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
 ```
 
 ## 版本更新
+* **1.0.13(2016.12.06)**
+    - mockfile第二个参数的needLocal默认值改为false
+    - ctx.mockfile设为false时将不使用模拟配置
 * **1.0.12(2016.10.18)**
     - 取消版本检查
     - 删除加载数据header的content-length

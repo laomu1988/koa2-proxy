@@ -10,6 +10,15 @@
  *      redirect reg redirectUrl #匹配到正则，则转发到新的url
  *      exec reg execFile
  * @param {boolean} needLocal 是否需要是本地请求,默认true,主要用来避免代理时污染代理请求
+ *
+ * @example 配置某个文件作为模拟规则文件
+ * bnjs.mockfile(__dirname + '/server.conf');
+ *
+ * @example 部分路径不使用模拟文件配置
+ * bnjs.when('/test1/',function (ctx) {
+ *     ctx.mockfile = false;
+ * });
+ * bnjs.mockfile(__dirname + '/server.conf');
  * */
 var fs = require('fs');
 var Path = require('path');
@@ -26,12 +35,12 @@ module.exports = function (mockfile, needLocal) {
         return;
     }
     if (typeof needLocal == 'undefined') {
-        needLocal = true;
+        needLocal = false;
     }
     return function (ctx, next) {
         ctx.logger.debug('middleware: mockfile');
         // 文件已发送
-        if (ctx.hasSend() || (needLocal && !ctx.isLocal())) {
+        if (ctx.mockfile === false || ctx.hasSend() || (needLocal && !ctx.isLocal())) {
             return next();
         }
         Mockfile(ctx, mockfile);

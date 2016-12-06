@@ -1,4 +1,7 @@
 ## 版本更新
+* **1.0.13(2016.12.06)**
+    - mockfile第二个参数的needLocal默认值改为false
+    - ctx.mockfile设为false时将不使用模拟配置
 * **1.0.12(2016.10.18)**
     - 取消版本检查
     - 删除加载数据header的content-length

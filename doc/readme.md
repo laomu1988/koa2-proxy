@@ -28,16 +28,18 @@ proxy.mockfile(__dirname + '/mockfile.txt');
 // 解析smarty模板
 proxy.smarty({ext: '.html', data: {data: 'smarty html'}});
 
-//
+// 请求开始时转发本地请求到网络
 proxy.on('start', function (ctx) {
     console.log('start: ', ctx.request.url, ctx.isLocal());
-    // 请求开始时转发本地请求到网络
     ctx.request.host = 'www.koa2.com';
 });
-proxy.on('end', function (ctx) {
-    // 请求结束时
-    console.log('end: ', ctx.request.url);
+// 请求结束时输出状态
+bnjs.on('end', function (ctx) {
+    console.log('end: ' + ctx.response.status);
+    console.log('end: ' + ctx.response.get('content-type'));
+    // console.log('end: ' + ctx.response.body);
 });
+
 
 // 监听端口
 proxy.listen(3010);
