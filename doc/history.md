@@ -1,4 +1,8 @@
-## 版本更新
+## 版本更新(使用lazy-doc打包自doc/history.md)
+* **1.0.15(2017.02.23)**
+    - 完善dependencies
+* **1.0.14(2016.12.29)**
+    - 使用.npmignore配置npm发布时目录
 * **1.0.13(2016.12.06)**
     - mockfile第二个参数的needLocal默认值改为false
     - ctx.mockfile设为false时将不使用模拟配置

@@ -82,7 +82,7 @@ proxy.listen(3010);
 ### 注意问题
 * ctx.request.host不能直接修改，需要通过ctx.request.header.host修改
 
-## 参数详细解释
+## api详细解释
 
 ###  proxy.listen(3000)
 
@@ -208,7 +208,7 @@ proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
    - 2016.08.18 增加opts.list,配置可展示目录下文件列表
 ```
 
-## 版本更新
+## 版本更新(使用lazy-doc打包自doc/history.md)
 * **1.0.15(2017.02.23)**
     - 完善dependencies
 * **1.0.14(2016.12.29)**

@@ -82,5 +82,5 @@ proxy.listen(3010);
 ### 注意问题
 * ctx.request.host不能直接修改，需要通过ctx.request.header.host修改
 
-## 参数详细解释
+## api详细解释
 
