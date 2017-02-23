@@ -6,14 +6,17 @@
   "scripts": {
     "test": "istanbul cover _mocha",
     "build": "babel src --watch -d  lib",
-    "doc": "node doc/doc.js"
+    "doc": "node doc/doc.js",
+    "push": "npm version patch && nrm use npm && npm publish"
   },
   "dependencies": {
     "babel-core": "^6.10.4",
     "babel-polyfill": "^6.9.1",
     "check-update": "0.0.8",
+    "ip": "^1.1.4",
     "koa": "^2.0.0",
     "koa-bodyparser": "^3.1.0",
+    "logger-color": "^1.0.3",
     "pem": "^1.8.3",
     "regenerator": "^0.8.46",
     "request": "^2.72.0",
