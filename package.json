@@ -17,6 +17,7 @@
     "koa": "^2.0.0",
     "koa-bodyparser": "^3.1.0",
     "logger-color": "^1.0.3",
+    "open": "0.0.5",
     "pem": "^1.8.3",
     "regenerator": "^0.8.46",
     "request": "^2.72.0",

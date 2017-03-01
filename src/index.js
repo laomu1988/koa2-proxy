@@ -36,6 +36,7 @@ proxy.when = function () {
 
 proxy.listen = listen.bind(proxy);
 proxy.logger = logger;
+proxy.open = require('./open').bind(proxy);
 
 var Event = require('events').EventEmitter;
 var event = new Event();

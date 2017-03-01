@@ -182,6 +182,13 @@ bnjs.mockfile(__dirname + '/server.conf');
 ```
 
 
+###  proxy.open('/index.html')
+
+使用浏览器打开指定网页,假如不指定域名,则会使用localhost和监听端口(listen调用时的监听端口)
+
+*  url 打开的网址
+
+
 ###  proxy.static(root, opts)
 
 创建静态文件服务器
@@ -209,6 +216,8 @@ proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
 ```
 
 ## 版本更新(使用lazy-doc打包自doc/history.md)
+* **1.0.16(2017.03.01)**
+    - 增加函数proxy.open,自动打开浏览器
 * **1.0.15(2017.02.23)**
     - 完善dependencies
 * **1.0.14(2016.12.29)**
