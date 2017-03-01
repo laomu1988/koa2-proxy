@@ -64,5 +64,19 @@ process.on('Error', function (err) {
     proxy.logger.error('catchError:', err, err.stack);
 });
 
+/**
+ * 浏览根网址时自动跳转到指定地址
+ * @function proxy.index('/index.html')
+ * @index: 111
+ * @param {string} url 跳转地址,默认/index.html
+ *
+ */
+proxy.index = function (url) {
+    var index = url || '/index.html';
+    proxy.when({url: /^[\/\s]*$/}, function (ctx) {
+        ctx.response.redirect(index);
+    });
+    return proxy;
+};
 
 module.exports = proxy;

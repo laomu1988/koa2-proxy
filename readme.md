@@ -150,6 +150,13 @@ proxy.when({url:'test.html',phase: 'response' },function(ctx){
 ```
 
 
+###  proxy.index('/index.html')
+
+浏览根网址时自动跳转到指定地址
+
+*  {string} url 跳转地址,默认/index.html
+
+
 ###  proxy.mockfile(mockfile, needLocal)
 
 匹配规则之后发送模拟数据,主要用来mock请求数据
@@ -186,7 +193,7 @@ bnjs.mockfile(__dirname + '/server.conf');
 
 使用浏览器打开指定网页,假如不指定域名,则会使用localhost和监听端口(listen调用时的监听端口)
 
-*  url 打开的网址
+*  {string} url 打开的网址
 
 
 ###  proxy.static(root, opts)
@@ -216,6 +223,8 @@ proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
 ```
 
 ## 版本更新(使用lazy-doc打包自doc/history.md)
+* **1.0.17(2017.03.01)**
+    - 增加函数proxy.index,浏览根目录时自动跳转
 * **1.0.16(2017.03.01)**
     - 增加函数proxy.open,自动打开浏览器
 * **1.0.15(2017.02.23)**
