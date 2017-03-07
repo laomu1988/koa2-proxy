@@ -15,6 +15,7 @@
     "check-update": "0.0.8",
     "ip": "^1.1.4",
     "koa": "^2.0.0",
+    "koa-body": "^2.0.0",
     "koa-bodyparser": "^3.1.0",
     "koa2-match": "^1.0.5",
     "logger-color": "^1.0.3",
