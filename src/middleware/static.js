@@ -70,6 +70,9 @@ module.exports = function (root, config) {
                             // 没有找到文件
                             pathname = (pathname + '/').replace(/\/+/g, '/');
                             var files = fs.readdirSync(path);
+                            files = files.map(function(file) {
+                                if(isDir(path + file)) return file + '/';
+                            });
                             var body = '', listType = typeof config.list;
                             if (listType === 'string' || listType == 'boolean') {
                                 body = '<!DOCTYPE html><html lang="cn"><head><meta charset="UTF-8">' +
@@ -86,7 +89,7 @@ module.exports = function (root, config) {
                                 }
                                 body += '</body></html>';
                             } else if (listType == 'function') {
-                                body = config.list(list, pathname, path);
+                                body = config.list(files, pathname, path);
                             }
                             if (body) ctx.response.body = body;
                         }
@@ -101,3 +104,10 @@ module.exports = function (root, config) {
         return next();
     };
 };
+
+
+
+function isDir(path) {
+    var stat =fs.statSync(path);
+    return stat.isDirectory()
+}
