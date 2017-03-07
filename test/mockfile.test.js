@@ -13,7 +13,7 @@ describe('koa2-proxy.mockfile', function () {
     proxy.mockfile(__dirname + '/mockfile.txt');
 
     it('test redirect', function (done) {
-        request(proxy.httpServer).get('/').expect(302).end(function (err, res) {
+        request(proxy.httpServer).get('/mockfile_redirect').expect(302).end(function (err, res) {
             expect(res.text).to.include('mockfile.re.js');
             done(err);
         });

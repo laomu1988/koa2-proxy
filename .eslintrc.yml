@@ -1,0 +1,25 @@
+env:
+  node: true
+  browser: true
+  es6: true
+parserOptions:
+  ecmaVersion: 8
+extends:
+  - 'eslint:recommended'
+plugins:
+    - babel
+rules:
+  indent:
+    - error
+    - 2
+    - SwitchCase: 1
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - error
+    - single
+  semi:
+    - error
+    - never
+  no-console: 0

@@ -5,6 +5,7 @@ var koa = require('koa');
 var bodyParser = require('koa-bodyparser');
 var listen = require('./listen');
 var logger = require('logger-color');
+var match = require('koa2-match');
 var proxy = {};
 var app = new koa;
 proxy.app = app;
@@ -25,8 +26,14 @@ proxy.smarty = function () {
     app.use(require('./middleware/smarty').apply(proxy, arguments));
 };
 
+
+var addMatched = false;
 proxy.when = function () {
-    app.use(require('./middleware/when').apply(proxy, arguments));
+    match.match.apply(match, arguments);
+    if(!addMatched) {
+        addMatched = true;
+        app.use(match.callback());
+    }
 };
 
 //proxy.browser = function (server) {
