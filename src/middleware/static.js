@@ -72,6 +72,7 @@ module.exports = function (root, config) {
                             var files = fs.readdirSync(path);
                             files = files.map(function(file) {
                                 if(isDir(path + file)) return file + '/';
+                                else return file;
                             });
                             var body = '', listType = typeof config.list;
                             if (listType === 'string' || listType == 'boolean') {
@@ -84,7 +85,7 @@ module.exports = function (root, config) {
                                 if (config.list === 'string')   body += config.list;
                                 body += '<h1><a href="javascript:history.go(0);" title="点击刷新">' + pathname + '</a></h1>';
                                 body += '<p><a href="' + pathname + '../" title="返回上一级">返回上一级</a></p><hr><br>';
-                                for (var i = 0; i < files.length; i++) {
+                                for (let i = 0; i < files.length; i++) {
                                     body += '<p><a href="' + pathname + files[i] + '" >' + files[i] + '</a></p>';
                                 }
                                 body += '</body></html>';
