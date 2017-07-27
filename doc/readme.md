@@ -28,6 +28,17 @@ proxy.mockfile(__dirname + '/mockfile.txt');
 // 解析smarty模板
 proxy.smarty({ext: '.html', data: {data: 'smarty html'}});
 
+// 转发请求到指定host
+proxy.when('/api', function(ctx) {
+    ctx.request.host = 'www.test.com';
+    ctx.request.protocol = 'http';
+});
+
+// 配置代理请求结束后修改body
+proxy.when({'.html', phase: 'response'}, function(ctx) {
+    ctx.response.body += '<div>test</div>';
+});
+
 // 请求开始时转发本地请求到网络
 proxy.on('start', function (ctx) {
     console.log('start: ', ctx.request.url, ctx.isLocal());
@@ -39,7 +50,6 @@ bnjs.on('end', function (ctx) {
     console.log('end: ' + ctx.response.get('content-type'));
     // console.log('end: ' + ctx.response.body);
 });
-
 
 // 监听端口
 proxy.listen(3010);

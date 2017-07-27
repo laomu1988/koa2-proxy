@@ -27,7 +27,7 @@ module.exports = function (root, config) {
         proxy.logger.error('koa-proxy.static need one param as server root.');
         return;
     }
-    if (arguments.length == 2) {
+    if (arguments.length === 2) {
         config.root = root;
     } else {
         config = {root: root};
@@ -47,17 +47,18 @@ module.exports = function (root, config) {
                 var pathname = Url.parse(ctx.request.url).pathname;
                 if (config.path) {
                     var index = pathname.indexOf(config.path);
-                    if (index == 0 || index == 1) {
+                    if (index === 0 || index === 1) {
                         pathname = pathname.substr(config.path.length + index);
                     } else {
                         return next();
                     }
                 }
-                var path = Path.resolve(config.root, './' + pathname);
+                var path = Path.resolve(config.root + '/', './' + pathname);
                 if (fs.existsSync(path)) {
                     var stat = fs.statSync(path);
                     if (stat.isDirectory()) {
-                        if (typeof config.index == 'string') {
+                        path += '/';
+                        if (typeof config.index === 'string') {
                             ctx.sendFile(Path.resolve(path, config.index));
                         } else if (config.index instanceof Array) {
                             for (var i = 0; i < config.index.length; i++) {
