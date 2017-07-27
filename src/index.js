@@ -26,6 +26,29 @@ proxy.smarty = function () {
 }
 
 var addMatched = false
+/**
+ * 当请求的内容和condition匹配时,执行callback
+ * @function proxy.when([condition,] callback)
+ * @index 99
+ * @param condition
+ *        {string|reg} condition url包含string或者reg.test(url)为tru时,将执行callback
+ *        {object} condition 匹配条件列表,其属性值可以是header的字段或者host,fullUrl,url,phase,method等
+ *            - {string|reg|function} condition.url 匹配url(host之后的部分)
+ *            - {string|reg|function} condition.fullUrl (匹配)
+ *            - {string} condition.phase 匹配阶段,request或者response,默认request
+ *            - {string|reg|function} condition.cookie
+ *            - {string|reg|function} ...  匹配其他任意header字段
+ * @param {function} callback 匹配时执行的函数,参数ctx
+ * @example test.html的内容设置为test
+ * proxy.when('test.html',function(ctx){
+ *     ctx.response.body = 'test';
+ * });
+ * @example test.html的内容增加一个div
+ * proxy.when({url:'test.html',phase: 'response' },function(ctx){
+ *     ctx.response.body +='<div>test</div>';
+ * });
+ *
+ */
 proxy.when = function () {
     match.match.apply(match, arguments)
     if (!addMatched) {
@@ -79,7 +102,7 @@ process.on('Error', function (err) {
 /**
  * 浏览根网址时自动跳转到指定地址
  * @function proxy.index('/index.html')
- * @index: 111
+ * @index 98
  * @param {string} url 跳转地址,默认/index.html
  *
  */

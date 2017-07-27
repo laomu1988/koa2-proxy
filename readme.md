@@ -28,6 +28,17 @@ proxy.mockfile(__dirname + '/mockfile.txt');
 // 解析smarty模板
 proxy.smarty({ext: '.html', data: {data: 'smarty html'}});
 
+// 转发请求到指定host
+proxy.when('/api', function(ctx) {
+    ctx.request.host = 'www.test.com';
+    ctx.request.protocol = 'http';
+});
+
+// 配置代理请求结束后修改body
+proxy.when({'.html', phase: 'response'}, function(ctx) {
+    ctx.response.body += '<div>test</div>';
+});
+
 // 请求开始时转发本地请求到网络
 proxy.on('start', function (ctx) {
     console.log('start: ', ctx.request.url, ctx.isLocal());
@@ -39,7 +50,6 @@ bnjs.on('end', function (ctx) {
     console.log('end: ' + ctx.response.get('content-type'));
     // console.log('end: ' + ctx.response.body);
 });
-
 
 // 监听端口
 proxy.listen(3010);
@@ -136,7 +146,7 @@ proxy.listen({port: 8000,https: true});
 
 ```
 proxy.when('test.html',function(ctx){
-     ctx.response.body = 'test';
+    ctx.response.body = 'test';
 });
 ```
 
@@ -145,7 +155,7 @@ proxy.when('test.html',function(ctx){
 
 ```
 proxy.when({url:'test.html',phase: 'response' },function(ctx){
-     ctx.response.body +='<div>test</div>';
+    ctx.response.body +='<div>test</div>';
 });
 ```
 
@@ -223,6 +233,10 @@ proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
 ```
 
 ## 版本更新(使用lazy-doc打包自doc/history.md)
+* **1.1.0(2017.07.27)**
+    - 静态资源文件夹路径增加斜线
+    - 使用`koa-match`替代内置when
+    - 上传文件处理
 * **1.0.17(2017.03.01)**
     - 增加函数proxy.index,浏览根目录时自动跳转
 * **1.0.16(2017.03.01)**
