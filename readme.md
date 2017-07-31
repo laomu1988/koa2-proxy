@@ -233,6 +233,8 @@ proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
 ```
 
 ## 版本更新(使用lazy-doc打包自doc/history.md)
+* **1.1.2(2017.07.32)**
+    - fix无文件时body错误
 * **1.1.0(2017.07.27)**
     - 静态资源文件夹路径增加斜线
     - 使用`koa-match`替代内置when
