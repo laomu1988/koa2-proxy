@@ -81,10 +81,11 @@ require('./extends_proxy')(proxy)
 proxy.use(bodyParser({multipart: true}))
 proxy.use(function (ctx, next) {
     var body = ctx.request.body
-    if (body) {
+    if (body && body.fields && body.files) {
+        console.log('body:', body);
         ctx.request._body = body
         ctx.request.body = body.fields
-        if (body.files) ctx.request.files = body.files
+        ctx.request.files = body.files
     }
     return next()
 })
