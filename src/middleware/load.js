@@ -30,6 +30,7 @@ module.exports = function (config) {
         var uri = ctx.fullUrl()
 
         ctx.logger.log('请求网络地址：', uri, '               ')
+        console.log('load_remote:', uri, '               ');
         ctx.request.header['accept-encoding'] = 'deflate' // 取消gzip压缩
         // ctx.request.header['connection'] = 'close'; // 取消keep-alive
         // ctx.request.header['proxy-connection'] = 'close'; // 代理
@@ -61,10 +62,17 @@ module.exports = function (config) {
             }
         }
         if (form) {
-            ctx.request.header['content-type'].indexOf('form-data') ? reqdata.formData = form : reqdata.form = form
+            let contentType = ctx.request.header['content-type'];
+            if (contentType && contentType.indexOf('form-data')) {
+                reqdata.formData = form
+            }
+            else {
+                reqdata.form = form
+            }
         }
 
         return new Promise(function (resolve, reject) {
+            // console.log('reqdata:', reqdata);
             request(reqdata, function (err, response, body) {
                 try {
                     if (!err) {
