@@ -4,7 +4,7 @@
   "description": "基于koa@2的代理工具，支持http和https，并且可以当做本地服务器使用",
   "main": "lib/index.js",
   "scripts": {
-    "test": "istanbul cover _mocha",
+    "test": "mocha",
     "build": "babel src --watch -d  lib",
     "doc": "node doc/doc.js",
     "push": "npm version patch && nrm use npm && npm publish"
@@ -19,6 +19,7 @@
     "koa-bodyparser": "^3.1.0",
     "koa2-match": "^1.0.5",
     "logger-color": "^1.0.3",
+    "mime-types": "^2.1.16",
     "open": "0.0.5",
     "pem": "^1.8.3",
     "regenerator": "^0.8.46",

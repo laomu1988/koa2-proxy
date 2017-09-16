@@ -12,9 +12,6 @@
  * @example
  * proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
  *
- *
- * @history
- *    - 2016.08.18 增加opts.list,配置可展示目录下文件列表
  * */
 
 var fs = require('fs');

@@ -226,14 +226,13 @@ bnjs.mockfile(__dirname + '/server.conf');
 proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
 ```
 
-**history**
-
-```
-   - 2016.08.18 增加opts.list,配置可展示目录下文件列表
-```
-
 ## 版本更新(使用lazy-doc打包自doc/history.md)
-* **1.1.2(2017.07.32)**
+* **1.1.4(2017.09.15)**
+    - feat: 使用mime-types计算文件的content-type
+    - fix: 部分文件类型计算问题，form-data判定问题
+* **1.1.3(2017.08.03)**
+    - fix：上传文件bug
+* **1.1.2(2017.07.31)**
     - fix无文件时body错误
 * **1.1.0(2017.07.27)**
     - 静态资源文件夹路径增加斜线

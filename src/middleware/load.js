@@ -63,7 +63,7 @@ module.exports = function (config) {
         }
         if (form) {
             let contentType = ctx.request.header['content-type'];
-            if (contentType && contentType.indexOf('form-data')) {
+            if (contentType && contentType.indexOf('form-data') >= 0) {
                 reqdata.formData = form
             }
             else {

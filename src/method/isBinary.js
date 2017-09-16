@@ -3,18 +3,27 @@
  * */
 
 var path = require('path');
+var mime = require('mime-types');
 module.exports = function (filename) {
     if (!filename) {
         return false;
     }
+
+    var contentType = mime.lookup(filename);
+    if (contentType && contentType.match(/(text|html|xml|json|javascript|svg)/)) {
+        return false;
+    }
+
     var len = filename.indexOf('?');
     if (len > 0) {
         filename = filename.substr(0, len);
     }
+
     len = filename.indexOf('#');
     if (len > 0) {
         filename = filename.substr(0, len);
     }
+
     var ext = path.extname(filename);
     switch (ext) {
         case '.rar':
@@ -26,6 +35,12 @@ module.exports = function (filename) {
         case '.psd':
         case '.ico':
         case '.icon':
+        case '.ttf':
+        case '.eot':
+        case '.woff':
+        case '.swf':
+        case '.flv':
+        case '.mp4':
             return true;
     }
     return false;
