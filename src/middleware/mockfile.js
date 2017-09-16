@@ -12,13 +12,13 @@
  * @param {boolean} needLocal 是否需要是本地请求,默认true,主要用来避免代理时污染代理请求
  *
  * @example 配置某个文件作为模拟规则文件
- * bnjs.mockfile(__dirname + '/server.conf');
+ * proxy.mockfile(__dirname + '/server.conf');
  *
  * @example 部分路径不使用模拟文件配置
- * bnjs.when('/test1/',function (ctx) {
+ * proxy.when('/test1/',function (ctx) {
  *     ctx.mockfile = false;
  * });
- * bnjs.mockfile(__dirname + '/server.conf');
+ * proxy.mockfile(__dirname + '/server.conf');
  * */
 var fs = require('fs');
 var Path = require('path');

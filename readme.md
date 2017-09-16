@@ -45,7 +45,7 @@ proxy.on('start', function (ctx) {
     ctx.request.host = 'www.koa2.com';
 });
 // 请求结束时输出状态
-bnjs.on('end', function (ctx) {
+proxy.on('end', function (ctx) {
     console.log('end: ' + ctx.response.status);
     console.log('end: ' + ctx.response.get('content-type'));
     // console.log('end: ' + ctx.response.body);
@@ -185,17 +185,17 @@ proxy.when({url:'test.html',phase: 'response' },function(ctx){
 **示例:** 配置某个文件作为模拟规则文件
 
 ```
-bnjs.mockfile(__dirname + '/server.conf');
+proxy.mockfile(__dirname + '/server.conf');
 ```
 
 
 **示例:** 部分路径不使用模拟文件配置
 
 ```
-bnjs.when('/test1/',function (ctx) {
+proxy.when('/test1/',function (ctx) {
     ctx.mockfile = false;
 });
-bnjs.mockfile(__dirname + '/server.conf');
+proxy.mockfile(__dirname + '/server.conf');
 ```
 
 

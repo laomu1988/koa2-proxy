@@ -45,7 +45,7 @@ proxy.on('start', function (ctx) {
     ctx.request.host = 'www.koa2.com';
 });
 // 请求结束时输出状态
-bnjs.on('end', function (ctx) {
+proxy.on('end', function (ctx) {
     console.log('end: ' + ctx.response.status);
     console.log('end: ' + ctx.response.get('content-type'));
     // console.log('end: ' + ctx.response.body);
