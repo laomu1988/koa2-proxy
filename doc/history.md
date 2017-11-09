@@ -1,4 +1,6 @@
 ## 版本更新(使用lazy-doc打包自doc/history.md)
+* **1.1.6(2017.11.09)**
+    - fix: issues/4 修改protocol不生效的问题
 * **1.1.4(2017.09.15)**
     - feat: 使用mime-types计算文件的content-type
     - fix: 部分文件类型计算问题，form-data判定问题

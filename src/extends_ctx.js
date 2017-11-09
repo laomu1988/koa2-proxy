@@ -40,6 +40,30 @@ function extendRequest(req) {
             configurable: true
         }
     });
+
+    Object.defineProperties(req, {
+        protocol: {
+            get: function () {
+                if(this._protocol) return this._protocol;
+                const proxy = this.app.proxy;
+                if (this.socket.encrypted) return 'https';
+                if (!proxy) return 'http';
+                const proto = this.get('X-Forwarded-Proto') || 'http';
+                return proto.split(/\s*,\s*/)[0];
+            },
+            set: function (protocol) {
+                if(protocol.indexOf('https') >= 0) {
+                    this._protocol = 'https';
+                }
+                else if(protocol.indexOf('http') > 0) {
+                    this._protocol = 'http';
+                }
+                return this._protocol;
+            },
+            enumerable: true,
+            configurable: true
+        }
+    });
 }
 
 
