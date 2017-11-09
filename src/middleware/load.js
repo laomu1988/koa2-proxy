@@ -21,7 +21,7 @@ function handleHeader(header) {
     return header
 }
 
-module.exports = function (config) {
+module.exports = function () {
     return function (ctx, next) {
         ctx.logger.debug('middleware: load')
         if (ctx.hasSend() || ctx.isLocal()) {
@@ -53,7 +53,7 @@ module.exports = function (config) {
             for (var attr in files) {
                 var file = files[attr]
                 form[attr] = {
-                    value: fs.createReadScream(file.path),
+                    value: fs.createReadStream(file.path),
                     options: {
                         filename: file.name,
                         contentType: file.type
@@ -63,8 +63,13 @@ module.exports = function (config) {
         }
         if (form) {
             let contentType = ctx.request.header['content-type'];
-            if (contentType && contentType.indexOf('form-data') >= 0) {
-                reqdata.formData = form
+            if (contentType) {
+                if (contentType.indexOf('form-data') >= 0) {
+                    reqdata.formData = form
+                }
+                else if(contentType.indexOf('json') >= 0) {
+                    reqdata.json = form
+                }
             }
             else {
                 reqdata.form = form

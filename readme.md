@@ -227,6 +227,8 @@ proxy.static(__dirname + '/output', {path: '/static/', index: 'index.html'});
 ```
 
 ## 版本更新(使用lazy-doc打包自doc/history.md)
+* **1.1.7(2017.11.09)**
+    - fix: issues/5 文件读取函数错误；转发application/json格式
 * **1.1.6(2017.11.09)**
     - fix: issues/4 修改protocol不生效的问题
 * **1.1.4(2017.09.15)**
